@@ -1,13 +1,13 @@
-#USERS Endpoint
+# USERS Endpoint
 
-##Available Interfaces
+## Available Interfaces
 
-###/users/ GET
+### /users/ GET
 
-###/users/:id/ GET
+### /users/:id/ GET
 
-###/users/ POST
+### /users/ POST
 
-###/users/:id/ PUT
+### /users/:id/ PUT
 
-###/users/:id/ DELETE
+### /users/:id/ DELETE

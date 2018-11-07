@@ -6,7 +6,7 @@ var bcrypt = require("bcrypt-nodejs");
 var jwt = require("jwt-simple");
 
 // Register a UVFit device for a user, POST
-router.post('/', function (req, res, next) {
+router.post('/register', function (req, res, next) {
 	// TODO: Validate email
 	var emailValid = true;
 
@@ -52,12 +52,12 @@ router.get("/:id", function (req, res, next) {
 });
 
 // TODO: Implement PUT method on /uvfit/
-router.put("/:id", function (req, res, next) {
+router.put("/update/:id", function (req, res, next) {
 	res.status(501).json({ success: false, message: "UVFit PUT endpoint not implemented." });
 });
 
 // TODO: Implement DELETE method on /uvfit/
-router.delete("/:id", function (req, res, next) {
+router.delete("/delete/:id", function (req, res, next) {
 	res.status(501).json({ success: false, message: "UVFit DELETE endpoint not implemented." });
 });
 

@@ -6,7 +6,7 @@ var bcrypt = require("bcrypt-nodejs");
 var jwt = require("jwt-simple");
 
 // Insert new UV Fit data entries
-router.post('/', function (req, res, next) {
+router.post('/submit', function (req, res, next) {
 	res.status(501).json({ success: false, message: "UVFitData POST endpoint not implemented." });
 });
 
@@ -20,12 +20,12 @@ router.get("/:id", function (req, res, next) {
 });
 
 // TODO: Implement PUT method on /uvfitdata/
-router.put("/:id", function (req, res, next) {
+router.put("/update/:id", function (req, res, next) {
 	res.status(501).json({ success: false, message: "UVFitData PUT endpoint not implemented." });
 });
 
 // TODO: Implement DELETE method on /uvfitdata/
-router.delete("/:id", function (req, res, next) {
+router.delete("/delete/:id", function (req, res, next) {
 	res.status(501).json({ success: false, message: "UVFitData DELETE endpoint not implemented." });
 });
 

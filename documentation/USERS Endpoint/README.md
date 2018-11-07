@@ -6,8 +6,8 @@
 
 ### /users/:id/ GET
 
-### /users/ POST
+### /users/register POST
 
-### /users/:id/ PUT
+### /users/update/:id/ PUT
 
-### /users/:id/ DELETE
+### /users/delete/:id/ DELETE

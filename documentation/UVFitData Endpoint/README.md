@@ -6,8 +6,8 @@
 
 ### /uvfitdata/:id/ GET
 
-### /uvfitdata/ POST
+### /uvfitdata/submit/ POST
 
-### /uvfitdata/:id/ PUT
+### /uvfitdata/update/:id/ PUT
 
-### /uvfitdata/:id/ DELETE
+### /uvfitdata/delete/:id/ DELETE

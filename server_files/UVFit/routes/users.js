@@ -43,7 +43,7 @@ router.post('/login', function (req, res, next) {
 });
 
 // Register new users, POST
-router.post('/', function (req, res, next) {
+router.post('/register', function (req, res, next) {
 	// Ensure correct POST method
 	if (!req.is('application/json')) {
 		return res.status(400).json({ success: false, message: "Invalid POST. It should be application/json." });
@@ -105,12 +105,12 @@ router.get("/:id", function (req, res, next) {
 });
 
 // TODO: Implement PUT method on /users/
-router.put("/:id", function (req, res, next) {
+router.put("/update/:id", function (req, res, next) {
 	res.status(501).json({ success: false, message: "Users PUT endpoint not implemented." });
 });
 
 // TODO: Implement DELETE method on /users/
-router.delete("/:id", function (req, res, next) {
+router.delete("/delete/:id", function (req, res, next) {
 	res.status(501).json({ success: false, message: "Users DELETE endpoint not implemented." });
 });
 

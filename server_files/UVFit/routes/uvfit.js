@@ -12,7 +12,7 @@ router.post('/', function (req, res, next) {
 
 	if (!emailValid) {
 		// Error can occur if a duplicate email is sent
-		res.status(400).json({ success: false, message: "Invalid valid email address." });
+		return res.status(400).json({ success: false, message: "Invalid valid email address." });
 	}
 
 	// TODO: Validate device ID
@@ -20,7 +20,7 @@ router.post('/', function (req, res, next) {
 
 	if (!deviceIdValid) {
 		// Error can occur if a duplicate email is sent
-		res.status(400).json({ success: false, message: "Invalid device ID." });
+		return res.status(400).json({ success: false, message: "Invalid device ID." });
 	}
 
 

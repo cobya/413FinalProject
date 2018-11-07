@@ -44,30 +44,35 @@ router.post('/login', function (req, res, next) {
 
 // Register new users, POST
 router.post('/', function (req, res, next) {
-	// TODO: Validate email
+	// Ensure correct POST method
+	if (!req.is('application/json')) {
+		return res.status(400).json({ success: false, message: "Invalid POST. It should be application/json." });
+	}
+
+	// Make sure all params exist
+	if (!req.body.hasOwnProperty("email") || !req.body.hasOwnProperty("fullName") || !req.body.hasOwnProperty("password")) {
+		return res.status(400).json({ success: false, message: "Please enter all necessary parameters." });
+	}
+
+	// Validate email addresses
 	var emailValid = true;
-
-	if (!emailValid) {
+	var reEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+	if (!reEmail.test(req.body.email)) {
 		// Error can occur if a duplicate email is sent
-		res.status(400).json({ success: false, message: "Invalid valid email address." });
+		return res.status(400).json({ success: false, message: "Invalid email address." });
 	}
 
-	// TODO: Validate device ID
-	var deviceIdValid = true;
-
-	if (!deviceIdValid) {
-		// Error can occur if a duplicate email is sent
-		res.status(400).json({ success: false, message: "Invalid device ID." });
-	}
-
-	// TODO: Validate password criteria
+	// Validate password criteria of 8 chars, upper case, lower case, 1 number
 	var passwordValid = true;
-
-	if (!passwordValid) {
-		// Error can occur if a duplicate email is sent
-		res.status(400).json({ success: false, message: "Invalid password." });
+	var reLowerCase = /[a-z]/;
+	var reUpperCase = /[A-Z]/;
+	var reNumber = /[0-9]/;
+	if (req.body.password.length < 8 || !reLowerCase.test(req.body.password) || !reUpperCase.test(req.body.password) || !reNumber.test(req.body.password)) {
+		passwordValid = false;
 	}
-
+	if (!passwordValid) {
+		return res.status(400).json({ success: false, message: "Invalid password. Ensure your password meets our password criteria." });
+	}
 
 	// If all items validate, create new user
 	bcrypt.hash(req.body.password, null, null, function (err, hash) {
@@ -75,8 +80,7 @@ router.post('/', function (req, res, next) {
 		var newUser = new UVFitUser({
 			email: req.body.email,
 			fullName: req.body.fullName,
-			passwordHash: hash, // hashed password
-			deviceId: req.body.deviceId,
+			passwordHash: hash // hashed password
 		});
 
 		newUser.save(function (err, user) {
@@ -85,7 +89,7 @@ router.post('/', function (req, res, next) {
 				res.status(400).json({ success: false, message: err.errmsg });
 			}
 			else {
-				res.status(201).json({ success: true, message: "Account for " + user.fullName + " has been created." })
+				res.status(201).json({ success: true, message: "Account for " + user.fullName + " (" + user.email + ") has been created." })
 			}
 		});
 	});

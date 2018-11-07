@@ -1,4 +1,4 @@
-# USERS Endpoint
+# Users Endpoint
 
 ## Available Interfaces
 

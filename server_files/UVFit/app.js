@@ -9,11 +9,13 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // Require the routers to be used
-var dataRouter = require('./routes/data');
+var dataRouter = require('./routes/uvfitdata');
+var uvFitRouter = require('./routes/uvfit');
 var usersRouter = require('./routes/users');
 
 // Use the specified routes
-app.use('/data', dataRouter);
+app.use('/uvfitdata', dataRouter);
+app.use('/uvfit', uvFitRouter);
 app.use('/users', usersRouter);
 
 // view engine setup

@@ -51,9 +51,11 @@ function registerNewAccount() {
 function registerResponse() {
 	if (this.status == 201) {
 		// successful registration
+		// TODO: Show registration successful message
 		console.log(this.response.message);
 	} else {
 		// unsuccessful registration
+		// TODO: Show error boxes, etc.
 		console.log(this.response.message);
 	}
 }

@@ -7,15 +7,6 @@ var jwt = require("jwt-simple");
 
 var secret = 'uvfit';
 
-// Register a test GET endpoint
-router.get("/test", function (req, res, next) {
-	// Send stringified object in response with response code 200
-	var testMsg = {
-		message: "Test"
-	}
-	res.status(200).send(JSON.stringify(testMsg));
-});
-
 // Login existing users
 router.post('/login', function (req, res, next) {
 	UVFitUser.findOne({ email: req.body.email }, function (err, user) {
@@ -58,7 +49,7 @@ router.post('/register', function (req, res, next) {
 	var emailValid = true;
 	var reEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 	if (!reEmail.test(req.body.email)) {
-		// Error can occur if a duplicate email is sent
+		// Error can occur if a duplicate email is sent. We won't worry about it for now
 		return res.status(400).json({ success: false, message: "Invalid email address." });
 	}
 

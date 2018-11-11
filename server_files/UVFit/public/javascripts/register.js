@@ -2,17 +2,26 @@
 	Javascript used for getting registration account values and registering a new account.
 */
 
-var $registerButton = $(document.getElementById("registerButton"));
-$registerButton.click(registerNewAccount);
+// On DOM ready, add event listeners and redirect if needed
+$(function () {
+	if (localStorage.hasOwnProperty("authToken")) {
+		location.replace("dashboard.html");
+		return;
+	}
+
+	$("#registerInfo").hide();
+
+	$("#registerButton").click(registerNewAccount);
+});
 
 function registerNewAccount() {
-	console.log("Register button clicked.");
-
+	$("#registerInfo").hide();
 	var enteredEmail = $("#emailAddress").val();
 	var emailValid = true;
 	var reEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 	if (!reEmail.test(enteredEmail)) {
-		console.log("Please enter a correctly formatted email address.");
+		$("#registerInfo").show();
+		$("#registerInfo").html("<p>" + "Please enter a correctly formatted email address." + "</p");
 	}
 
 	var enteredName = $("#fullName").val();
@@ -21,7 +30,8 @@ function registerNewAccount() {
 		nameValid = false;
 	}
 	if (!nameValid) {
-		console.log("Please enter your full name.");
+		$("#registerInfo").show();
+		$("#registerInfo").html("<p>" + "Please enter your full name." + "</p");
 	}
 
 	var enteredPass = $("#password").val();
@@ -33,7 +43,8 @@ function registerNewAccount() {
 		passwordValid = false;
 	}
 	if (!passwordValid) {
-		console.log("Please enter a password that meets our password criteria.");
+		$("#registerInfo").show();
+		$("#registerInfo").html("<p>" + "Please enter a password that meets our password criteria." + "</p");
 	}
 
 	if (!passwordValid || !nameValid || !emailValid) {
@@ -51,11 +62,14 @@ function registerNewAccount() {
 function registerResponse() {
 	if (this.status == 201) {
 		// successful registration
-		// TODO: Show registration successful message
-		console.log(this.response.message);
+		$("#registerInfo").show();
+		$("#registerInfo").html("<p>" + this.response.message + "</p");
+		setTimeout(function () {
+			location = "login.html";
+		}, 5000);
 	} else {
 		// unsuccessful registration
-		// TODO: Show error boxes, etc.
-		console.log(this.response.message);
+		$("#registerInfo").show();
+		$("#registerInfo").html("<p>Error: " + this.response.message + "</p");
 	}
 }

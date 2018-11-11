@@ -42,11 +42,26 @@
 		</div>
 	</nav>
 
+	<!-- Allow users to sign out -->
+	<div id="signout">
+		<input type="submit" id="signoutButton" value="Sign Out">
+	</div>
+
 	<!-- Register UV Fit Form -->
-	<label for="uvFitDeviceId">UV Fit Device ID</label>
-	<input type="text" name="uvFitDeviceId" id="uvFitDeviceId" placeholder="">
-	<br>
-	<input type="submit" value="Register UVFit">
+	<div id="registerUVFit">
+		<label for="uvFitDeviceIdReg">UV Fit Device ID</label>
+		<input type="text" name="uvFitDeviceIdReg" id="uvFitDeviceIdReg" placeholder="">
+		<br>
+		<input type="submit" id="registerUVFitButton" value="Register UVFit">
+	</div>
+
+	<!-- Update UV Fit Form -->
+	<div id="updateUVFit">
+		<label for="uvFitDeviceIdUpdate">UV Fit Device ID</label>
+		<input type="text" name="uvFitDeviceIdUpdate" id="uvFitDeviceIdUpdate" placeholder="">
+		<br>
+		<input type="submit" id="updateUVFitButton" value="Update UVFit">
+	</div>
 </body>
 
 </html>

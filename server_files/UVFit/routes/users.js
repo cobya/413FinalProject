@@ -22,6 +22,13 @@ router.post('/login', function (req, res, next) {
 					res.status(401).json({ success: false, error: "Error authenticating." });
 				}
 				else if (valid) {
+					// update last access
+					user.lastAccess = Date.now();
+					user.save(function (err, newUser) {
+						console.log("User " + newUser.email + " new last access of " + newUser.lastAccess);
+					});
+
+					// send the user their auth token
 					var token = jwt.encode({ email: req.body.email }, secret);
 					res.status(201).json({ success: true, token: token });
 				}

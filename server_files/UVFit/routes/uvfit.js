@@ -51,13 +51,27 @@ router.post('/register', function (req, res, next) {
 	});
 });
 
-// TODO: Implement GET method on /uvfit/
+// Implement GET method on /uvfit/
 router.get("/", function (req, res, next) {
-	return res.status(501).json({ success: false, message: "UVFit GET endpoint not implemented." });
+	UVFit.find({}, function (err, allData) {
+		if (err) {
+			return res.status(500).json({ success: false, message: err.errmsg });
+		}
+		else {
+			return res.status(200).json({ success: true, uvFitData: allData });
+		}
+	});
 });
 
 router.get("/:email", function (req, res, next) {
-	return res.status(501).json({ success: false, message: "UVFit ID GET endpoint not implemented." });
+	UVFit.find({ email: req.params.email }, function (err, uvFit) {
+		if (err) {
+			return res.status(500).json({ success: false, message: err.errmsg });
+		}
+		else {
+			return res.status(200).json({ success: true, uvFitData: uvFit });
+		}
+	});
 });
 
 // TODO: Implement PUT method on /uvfit/

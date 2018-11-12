@@ -27,9 +27,9 @@ function getUVFitRecentStats() {
 	var xhr = new XMLHttpRequest();
 	xhr.addEventListener("load", responseUVFitRecentStats);
 	xhr.responseType = "json";
-	xhr.open("GET", '/uvfit/' + localStorage.getItem("userEmail"));
+	xhr.open("GET", '/uvfitdata/' + localStorage.getItem("deviceId"));
 	xhr.setRequestHeader("Content-type", "application/json");
-	xhr.send(JSON.stringify({ email: localStorage.getItem("userEmail"), deviceId: localStorage.getItem("deviceId") }));
+	xhr.send(JSON.stringify({}));
 }
 
 // function to show recent UV fit data

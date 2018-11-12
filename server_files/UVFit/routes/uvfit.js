@@ -56,17 +56,17 @@ router.get("/", function (req, res, next) {
 	return res.status(501).json({ success: false, message: "UVFit GET endpoint not implemented." });
 });
 
-router.get("/:id", function (req, res, next) {
+router.get("/:email", function (req, res, next) {
 	return res.status(501).json({ success: false, message: "UVFit ID GET endpoint not implemented." });
 });
 
 // TODO: Implement PUT method on /uvfit/
-router.put("/update/:id", function (req, res, next) {
+router.put("/update/:email", function (req, res, next) {
 	return res.status(501).json({ success: false, message: "UVFit PUT endpoint not implemented." });
 });
 
 // TODO: Implement DELETE method on /uvfit/
-router.delete("/delete/:id", function (req, res, next) {
+router.delete("/delete/:email", function (req, res, next) {
 	return res.status(501).json({ success: false, message: "UVFit DELETE endpoint not implemented." });
 });
 

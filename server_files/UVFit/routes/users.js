@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var UVFitUser = require("../models/users");
+var UVFit = require("../models/uvfit");
 var bcrypt = require("bcrypt-nodejs");
 var jwt = require("jwt-simple");
 
@@ -11,7 +12,7 @@ var secret = 'uvfit';
 router.post('/login', function (req, res, next) {
 	UVFitUser.findOne({ email: req.body.email }, function (err, user) {
 		if (err) {
-			return res.status(401).json({ success: false, error: "Error communicating with database." });
+			return res.status(500).json({ success: false, error: "Error communicating with database." });
 		}
 		else if (!user) {
 			return res.status(401).json({ success: false, error: "The email or password provided was invalid." });
@@ -28,9 +29,21 @@ router.post('/login', function (req, res, next) {
 						console.log("User " + newUser.email + " new last access of " + newUser.lastAccess);
 					});
 
-					// send the user their auth token
-					var token = jwt.encode({ email: req.body.email }, secret);
-					return res.status(201).json({ success: true, token: token });
+					// determine if they have a registered device
+					UVFit.findOne({ email: req.body.email }, function (err, uvFit) {
+						if (err) {
+							return res.status(500).json({ success: false, error: "Error communicating with database." });
+						}
+						else {
+							// send the user their auth token
+							var token = jwt.encode({ email: req.body.email }, secret);
+							if (uvFit) {
+								return res.status(201).json({ success: true, email: req.body.email, token: token, deviceId: uvFit.deviceId, apiKey: uvFit.apiKey });
+							} else {
+								return res.status(201).json({ success: true, email: req.body.email, token: token, deviceId: null, apiKey: null });
+							}
+						}
+					});
 				}
 				else {
 					return res.status(401).json({ success: false, error: "The email or password provided was invalid." });
@@ -98,17 +111,17 @@ router.get("/", function (req, res, next) {
 	return res.status(501).json({ success: false, message: "Users GET endpoint not implemented." });
 });
 
-router.get("/:id", function (req, res, next) {
+router.get("/:email", function (req, res, next) {
 	return res.status(501).json({ success: false, message: "User ID GET endpoint not implemented." });
 });
 
 // TODO: Implement PUT method on /users/
-router.put("/update/:id", function (req, res, next) {
+router.put("/update/:email", function (req, res, next) {
 	return res.status(501).json({ success: false, message: "Users PUT endpoint not implemented." });
 });
 
 // TODO: Implement DELETE method on /users/
-router.delete("/delete/:id", function (req, res, next) {
+router.delete("/delete/:email", function (req, res, next) {
 	return res.status(501).json({ success: false, message: "Users DELETE endpoint not implemented." });
 });
 

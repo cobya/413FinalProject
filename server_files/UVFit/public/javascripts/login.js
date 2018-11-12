@@ -32,7 +32,14 @@ function runLogin() {
 function loginResponse() {
 	// 201 is successful login
 	if (this.status === 201) {
+		localStorage.setItem("userEmail", this.response.email);
 		localStorage.setItem("authToken", this.response.token);
+		if (this.response.deviceId != null) {
+			localStorage.setItem("deviceId", this.response.deviceId);
+		}
+		if (this.response.apiKey != null) {
+			localStorage.setItem("apiKey", this.response.apiKey);
+		}
 		location = "dashboard.html";
 	}
 	else {

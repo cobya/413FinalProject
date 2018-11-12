@@ -100,19 +100,33 @@ router.post('/register', function (req, res, next) {
 				return res.status(400).json({ success: false, message: err.errmsg });
 			}
 			else {
-				return res.status(201).json({ success: true, message: "Account for " + user.fullName + " (" + user.email + ") has been created." })
+				return res.status(201).json({ success: true, message: "Account for " + user.fullName + " (" + user.email + ") has been created." });
 			}
 		});
 	});
 });
 
-// TODO: Implement GET method on /users/
+// Implement GET method on /users/
 router.get("/", function (req, res, next) {
-	return res.status(501).json({ success: false, message: "Users GET endpoint not implemented." });
+	UVFitUser.find({}, function (err, users) {
+		if (err) {
+			return res.status(500).json({ success: false, message: err.errmsg });
+		}
+		else {
+			return res.status(200).json({ success: true, registeredUsers: users });
+		}
+	});
 });
 
 router.get("/:email", function (req, res, next) {
-	return res.status(501).json({ success: false, message: "User ID GET endpoint not implemented." });
+	UVFitUser.find({ email: req.params.email }, function (err, user) {
+		if (err) {
+			return res.status(500).json({ success: false, message: err.errmsg });
+		}
+		else {
+			return res.status(200).json({ success: true, registeredUser: user });
+		}
+	});
 });
 
 // TODO: Implement PUT method on /users/

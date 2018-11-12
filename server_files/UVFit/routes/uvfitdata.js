@@ -7,26 +7,26 @@ var jwt = require("jwt-simple");
 
 // Insert new UV Fit data entries
 router.post('/submit', function (req, res, next) {
-	res.status(501).json({ success: false, message: "UVFitData POST endpoint not implemented." });
+	return res.status(501).json({ success: false, message: "UVFitData POST endpoint not implemented." });
 });
 
 // TODO: Implement GET method on /uvfitdata/
 router.get("/", function (req, res, next) {
-	res.status(501).json({ success: false, message: "UVFitData GET endpoint not implemented." });
+	return res.status(501).json({ success: false, message: "UVFitData GET endpoint not implemented." });
 });
 
 router.get("/:id", function (req, res, next) {
-	res.status(501).json({ success: false, message: "UVFitData ID GET endpoint not implemented." });
+	return res.status(501).json({ success: false, message: "UVFitData ID GET endpoint not implemented." });
 });
 
 // TODO: Implement PUT method on /uvfitdata/
 router.put("/update/:id", function (req, res, next) {
-	res.status(501).json({ success: false, message: "UVFitData PUT endpoint not implemented." });
+	return res.status(501).json({ success: false, message: "UVFitData PUT endpoint not implemented." });
 });
 
 // TODO: Implement DELETE method on /uvfitdata/
 router.delete("/delete/:id", function (req, res, next) {
-	res.status(501).json({ success: false, message: "UVFitData DELETE endpoint not implemented." });
+	return res.status(501).json({ success: false, message: "UVFitData DELETE endpoint not implemented." });
 });
 
 module.exports = router;

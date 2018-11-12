@@ -11,15 +11,15 @@ var secret = 'uvfit';
 router.post('/login', function (req, res, next) {
 	UVFitUser.findOne({ email: req.body.email }, function (err, user) {
 		if (err) {
-			res.status(401).json({ success: false, error: "Error communicating with database." });
+			return res.status(401).json({ success: false, error: "Error communicating with database." });
 		}
 		else if (!user) {
-			res.status(401).json({ success: false, error: "The email or password provided was invalid." });
+			return res.status(401).json({ success: false, error: "The email or password provided was invalid." });
 		}
 		else {
 			bcrypt.compare(req.body.password, user.passwordHash, function (err, valid) {
 				if (err) {
-					res.status(401).json({ success: false, error: "Error authenticating." });
+					return res.status(401).json({ success: false, error: "Error authenticating." });
 				}
 				else if (valid) {
 					// update last access
@@ -30,10 +30,10 @@ router.post('/login', function (req, res, next) {
 
 					// send the user their auth token
 					var token = jwt.encode({ email: req.body.email }, secret);
-					res.status(201).json({ success: true, token: token });
+					return res.status(201).json({ success: true, token: token });
 				}
 				else {
-					res.status(401).json({ success: false, error: "The email or password provided was invalid." });
+					return res.status(401).json({ success: false, error: "The email or password provided was invalid." });
 				}
 			});
 		}
@@ -84,10 +84,10 @@ router.post('/register', function (req, res, next) {
 		newUser.save(function (err, user) {
 			if (err) {
 				// Error can occur if a duplicate email is sent
-				res.status(400).json({ success: false, message: err.errmsg });
+				return res.status(400).json({ success: false, message: err.errmsg });
 			}
 			else {
-				res.status(201).json({ success: true, message: "Account for " + user.fullName + " (" + user.email + ") has been created." })
+				return res.status(201).json({ success: true, message: "Account for " + user.fullName + " (" + user.email + ") has been created." })
 			}
 		});
 	});
@@ -95,21 +95,21 @@ router.post('/register', function (req, res, next) {
 
 // TODO: Implement GET method on /users/
 router.get("/", function (req, res, next) {
-	res.status(501).json({ success: false, message: "Users GET endpoint not implemented." });
+	return res.status(501).json({ success: false, message: "Users GET endpoint not implemented." });
 });
 
 router.get("/:id", function (req, res, next) {
-	res.status(501).json({ success: false, message: "User ID GET endpoint not implemented." });
+	return res.status(501).json({ success: false, message: "User ID GET endpoint not implemented." });
 });
 
 // TODO: Implement PUT method on /users/
 router.put("/update/:id", function (req, res, next) {
-	res.status(501).json({ success: false, message: "Users PUT endpoint not implemented." });
+	return res.status(501).json({ success: false, message: "Users PUT endpoint not implemented." });
 });
 
 // TODO: Implement DELETE method on /users/
 router.delete("/delete/:id", function (req, res, next) {
-	res.status(501).json({ success: false, message: "Users DELETE endpoint not implemented." });
+	return res.status(501).json({ success: false, message: "Users DELETE endpoint not implemented." });
 });
 
 // Set up the export

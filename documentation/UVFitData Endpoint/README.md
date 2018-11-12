@@ -4,7 +4,22 @@
 
 ### /uvfitdata/ GET
 
-### /uvfitdata/:id/ GET
+To GET UV Fit data for all devices,
+1. "Content-type" header should be set to "application/json"
+2. Expected return is a JSON object with the following parameters:
+    a) success: boolean
+    b) error: string containing error details. exists only if success is false.
+    c) submittedData: Array containing all submitted data entries in JSON.
+
+### /uvfitdata/:deviceId/ GET
+
+To GET UV Fit data for a singular device,
+1. "Content-type" header should be set to "application/json"
+2. :deviceId in the GET address should be the Photon's device ID you are interested in the data for.
+3. Expected return is a JSON object with the following parameters:
+    a) success: boolean
+    b) error: string containing error details. exists only if success is false.
+    c) submittedData: Array containing all submitted data entries in JSON for the specified device only.
 
 ### /uvfitdata/submit/ POST
 
@@ -24,6 +39,6 @@ To POST new UV Fit Data,
     c) message: string containing outcome.
 
 
-### /uvfitdata/update/:id/ PUT
+### /uvfitdata/update/:deviceId/ PUT
 
-### /uvfitdata/delete/:id/ DELETE
+### /uvfitdata/delete/:deviceId/ DELETE

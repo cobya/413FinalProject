@@ -2,30 +2,97 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var UVFitData = require("../models/uvfitdata");
+var UVFit = require("../models/uvfit");
 var bcrypt = require("bcrypt-nodejs");
 var jwt = require("jwt-simple");
 
 // Insert new UV Fit data entries
 router.post('/submit', function (req, res, next) {
-	return res.status(501).json({ success: false, message: "UVFitData POST endpoint not implemented." });
+	if (!req.body.hasOwnProperty("deviceId") || !req.body.hasOwnProperty("apiKey") || !req.body.hasOwnProperty("gpsX") || !req.body.hasOwnProperty("gpsY") || !req.body.hasOwnProperty("gpsZ") || !req.body.hasOwnProperty("measuredSpeed") || !req.body.hasOwnProperty("measuredUV")) {
+		return res.status(400).json({ success: false, message: "Please enter all necessary parameters." });
+	}
+
+	// Validate deviceId exists
+	UVFit.findOne({ deviceId: req.body.deviceId }, function (err, uvFit) {
+		if (err) {
+			return res.status(500).json({ success: false, error: "Error communicating with database." });
+		}
+		else if (!uvFit) {
+			return res.status(400).json({ success: false, error: "There is no device associated with that deviceId." });
+		}
+		else {
+			// make sure api keys match
+			if (req.body.apiKey == uvFit.apiKey) {
+				// create a new data entry and save it
+				var newUVFitEntry;
+				if (req.body.hasOwnProperty("timeStamp")) {
+					newUVFitEntry = new UVFitData({
+						deviceId: req.body.deviceId,
+						gpsLocationX: req.body.gpsX,
+						gpsLocationY: req.body.gpsY,
+						gpsLocationZ: req.body.gpsZ,
+						measuredSpeed: req.body.measuredSpeed,
+						measuredUV: req.body.measuredUV,
+						timeCollected: req.body.timeStamp
+					});
+				}
+				else {
+					newUVFitEntry = new UVFitData({
+						deviceId: req.body.deviceId,
+						gpsLocationX: req.body.gpsX,
+						gpsLocationY: req.body.gpsY,
+						gpsLocationZ: req.body.gpsZ,
+						measuredSpeed: req.body.measuredSpeed,
+						measuredUV: req.body.measuredUV
+					});
+				}
+
+				newUVFitEntry.save(function (err, user) {
+					if (err) {
+						return res.status(400).json({ success: false, message: err.errmsg });
+					}
+					else {
+						return res.status(201).json({ success: true, message: "Data submitted successfully." })
+					}
+				});
+			} else {
+				// Error can occur if a duplicate email is sent
+				return res.status(400).json({ success: false, message: "Invalid API key submitted." });
+			}
+		}
+	});
 });
 
-// TODO: Implement GET method on /uvfitdata/
+// Implement GET method on /uvfitdata/
 router.get("/", function (req, res, next) {
-	return res.status(501).json({ success: false, message: "UVFitData GET endpoint not implemented." });
+	UVFitData.find({}, function (err, allData) {
+		if (err) {
+			return res.status(500).json({ success: false, message: err.errmsg });
+		}
+		else {
+			return res.status(200).json({ success: true, submittedData: allData });
+		}
+	});
 });
 
-router.get("/:id", function (req, res, next) {
-	return res.status(501).json({ success: false, message: "UVFitData ID GET endpoint not implemented." });
+router.get("/:deviceId", function (req, res, next) {
+	UVFitData.find({ deviceId: req.params.deviceId }, function (err, deviceData) {
+		if (err) {
+			return res.status(500).json({ success: false, message: err.errmsg });
+		}
+		else {
+			return res.status(200).json({ success: true, submittedData: deviceData });
+		}
+	});
 });
 
 // TODO: Implement PUT method on /uvfitdata/
-router.put("/update/:id", function (req, res, next) {
+router.put("/update/:deviceId", function (req, res, next) {
 	return res.status(501).json({ success: false, message: "UVFitData PUT endpoint not implemented." });
 });
 
 // TODO: Implement DELETE method on /uvfitdata/
-router.delete("/delete/:id", function (req, res, next) {
+router.delete("/delete/:deviceId", function (req, res, next) {
 	return res.status(501).json({ success: false, message: "UVFitData DELETE endpoint not implemented." });
 });
 

@@ -7,7 +7,7 @@ var uvFitDataSchema = new db.Schema({
 	gpsLocationZ: { type: Number, required: true },
 	measuredSpeed: { type: Number, required: true },
 	measuredUV: { type: Number, required: true },
-	dateCollected: { type: Date, default: Date.now }
+	timeCollected: { type: Date, default: Date.now }
 });
 
 var UVFitDataEntry = db.model("UVFitDataEntry", uvFitDataSchema);

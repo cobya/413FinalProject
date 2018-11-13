@@ -1,64 +1,78 @@
+
+// This #include statement was automatically added by the Particle IDE.
 #include "sysReporter.h"
-    // This #include statement was automatically added by the Particle IDE.
-    #include <AssetTracker.h>
-    
-    #define DEBUG
-    
-    sysReporter::sysReporter(AssetTracker &theTracker) :
-    gpsSensor(theTracker) {
-        tick = 0;
-        state = S_Wait;
-        led = D7; 
-        pinMode(led, OUTPUT);
-    }
-    
-void sysReporter::execute() {
-    String postData;
 
-#ifdef DEBUG
-    Serial.print("sysReporter SM: ");
-    Serial.println(state);
-#endif
+// This #include statement was automatically added by the Particle IDE.
+#include <Adafruit_VEML6070.h>
 
-    switch (state) {
-        case sysReporter::S_Wait:
-            tick = 0;
-            digitalWrite(led, LOW);
-            
-            state = sysReporter::S_Publish;
-            break;
+// This #include statement was automatically added by the Particle IDE.
+#include <AssetTracker.h>
 
-        case sysReporter::S_Publish:
-            if (gpsSensor.gpsFix()) {
-               postData = String::format("{ \"longitude\": \"%f\", \"latitude\": \"%f\" }", 
-                                         gpsSensor.readLonDeg(), gpsSensor.readLatDeg());
-            }
-            else {
-               postData = String::format("{ \"longitude\": \"%f\", \"latitude\": \"%f\" }", 
-                                         -110.987420, 32.248820);
-            }
+//-------------------------------------------------------------------
 
-            Serial.println(postData);
-            Particle.publish("dataSubmit", postData);
+using namespace std;
+
+//-------------------------------------------------------------------
+
+#define ONE_DAY_MILLIS (24 * 60 * 60 * 1000)
+unsigned long lastSync = millis();
+
+//-------------------------------------------------------------------
+
+bool executeStateMachines = false;
  
-            
-            state = sysReporter::S_LedNotify;
-            break;
+//-------------------------------------------------------------------
 
-        case sysReporter::S_LedNotify:
-            digitalWrite(led, HIGH);
-            ++tick;
+AssetTracker locationTracker = AssetTracker();
 
-            // Keep LED on for 2 seconds
-            if (tick == 200) {
-                state = sysReporter::S_Wait;
-            }
-            else {
-                state = sysReporter::S_LedNotify;
-            }
-            break;
-    }
+//-------------------------------------------------------------------
+
+void stateMachineScheduler() {
+    executeStateMachines = true;
+    locationTracker.updateGPS();
+//    potholeDetector.execute();
+    //sysReporter.execute();
+}
+
+Timer stateMachineTimer(10, stateMachineScheduler);
+
+//-------------------------------------------------------------------
+
+void responseHandler(const char *event, const char *data) {
+    // Formatting output
+    String output = String::format("POST Response:\n  %s\n  %s\n", event, data);
+    // Log to serial console
+    Serial.println(output);
 }
 
 //-------------------------------------------------------------------
 
+void setup() {
+    Serial.begin(9600);
+
+    // Initialize the gps and turn it on    
+    locationTracker.begin();
+    locationTracker.gpsOn();
+    
+    // Handler for response from POSTing location to server
+    Particle.subscribe("hook-response/datasubmit", responseHandler, MY_DEVICES);
+    
+    stateMachineTimer.start();
+}    
+
+//-------------------------------------------------------------------
+
+void loop() {
+
+    // Request time synchronization from the Particle Cloud once per day
+    if (millis() - lastSync > ONE_DAY_MILLIS) {
+        Particle.syncTime();
+        lastSync = millis();
+    }
+
+    if (executeStateMachines) {
+        locationTracker.updateGPS();
+        Particle.publish("datasubmit", PRIVATE);
+        executeStateMachines = false;
+    }
+}

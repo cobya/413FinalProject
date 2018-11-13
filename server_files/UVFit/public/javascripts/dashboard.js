@@ -35,6 +35,19 @@ function getUVFitRecentStats() {
 // function to show recent UV fit data
 function responseUVFitRecentStats(data, textStatus, jqXHR) {
 	if (this.response.success){
+    for(var i=0;i<this.response.submittedData.length;i++)
+    {
+        var tr="<tr>";
+        var td1="<td>"+this.response.submittedData[i]["timeCollected"]+"</td>";
+        var td2="<td>"+this.response.submittedData[i]["gpsLocationX"]+"</td>";
+        var td3="<td>"+this.response.submittedData[i]["gpsLocationY"]+"</td>";
+        var td4="<td>"+this.response.submittedData[i]["measuredUV"]+"</td>";
+        var td5="<td>"+this.response.submittedData[i]["measuredSpeed"]+"</td></tr>";
+
+       $("#uvFitDataTable").append(tr+td1+td2+td3+td4+td5); 
+    }  
+
+		/*
 		$("#emailAddress").html(data.submittedData.deviceId);
 		$("#fullName").html(data.submittedData.fullName);
 		$("#lastAccess").html(data.submittedData.lastAccess);
@@ -43,6 +56,7 @@ function responseUVFitRecentStats(data, textStatus, jqXHR) {
 		for (var stats of data.submittedData){
 			$("#header").append("<li class='collection-item'>ID: " + stats.deviceId + ", GPS Location X: " + stats.gpsLocationX + ", GPS Location Y: " + stats.gpsLocationY + ", Measured Speed: " + stats.measuredSpeed + ", Measured UV: " + stats.measuredUV + ", Time Collected: " + stats.timeCollected + ".")
 		}
+		*/
 	}
 }
 

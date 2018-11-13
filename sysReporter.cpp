@@ -1,16 +1,16 @@
-    #include "sysReporter.h"
-    // This #include statement was automatically added by the Particle IDE.
-    #include <AssetTracker.h>
-    
-    #define DEBUG
-    
-    sysReporter::sysReporter(AssetTracker &theTracker) :
-    gpsSensor(theTracker) {
-        tick = 0;
-        state = S_Wait;
-        led = D7; 
-        pinMode(led, OUTPUT);
-    }
+#include "sysReporter.h"
+// This #include statement was automatically added by the Particle IDE.
+#include <AssetTracker.h>
+
+#define DEBUG
+
+sysReporter::sysReporter(AssetTracker &theTracker) :
+gpsSensor(theTracker) {
+    tick = 0;
+    state = S_Wait;
+    led = D7; 
+    pinMode(led, OUTPUT);
+}
     
 void sysReporter::execute() {
     String postData;

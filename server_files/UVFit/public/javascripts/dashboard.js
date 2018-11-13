@@ -33,8 +33,17 @@ function getUVFitRecentStats() {
 }
 
 // function to show recent UV fit data
-function responseUVFitRecentStats() {
-
+function responseUVFitRecentStats(data, textStatus, jqXHR) {
+	if (this.response.success){
+		$("#emailAddress").html(data.submittedData.deviceId);
+		$("#fullName").html(data.submittedData.fullName);
+		$("#lastAccess").html(data.submittedData.lastAccess);
+		$("#main").show();
+		
+		for (var stats of data.submittedData){
+			$("#header").append("<li class='collection-item'>ID: " + stats.deviceId + ", GPS Location X: " + stats.gpsLocationX + ", GPS Location Y: " + stats.gpsLocationY + ", Measured Speed: " + stats.measuredSpeed + ", Measured UV: " + stats.measuredUV + ", Time Collected: " + stats.timeCollected + ".")
+		}
+	}
 }
 
 // handle user sign outs

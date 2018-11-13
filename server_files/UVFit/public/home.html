@@ -19,6 +19,15 @@
   </head>
 
 <body>
+	<!-- Dropdown Structure -->
+	<ul id="dropdown1" class="dropdown-content">
+		<li><a href="home.html">Home</a></li>
+		<li><a href="dashboard.html">Dashboard</a></li>
+		<li><a href="login.html">Login</a></li>
+		<li><a href="register.html">Register</a></li>
+		<li class="divider"></li>
+		<li><a href="#!" id="signout">Sign out</a></li>
+	</ul>
 	<nav>
 		<div class="nav-wrapper blue darken-2">
 			<span id="name">UVFit</span>
@@ -37,23 +46,12 @@
 				</li>
 				<li class="collection-item">Email: <span id="emailAddress"></span></li>
 				<li class="collection-item">Name: <span id="fullName"></span></li>
-				<li class="collection-item">GPS Location X: <span id="gpsLocationX"></span></li>
-				<li class="collection-item">GPS Location Y: <span id="gpsLocationY"></span></li>
-				<li class="collection-item">Measured Speed: <span id="measuredSpeed"></span></li>
-				<li class="collection-item">Measured UV: <span id="measuredUV"></span></li>
 				<li class="collection-item">Last Access: <span id="lastAccess"></span></li>
 			</ul>
 			<ul class="collection with-header" id="devices">
-				<li class="collection-header">
+				<li class="collection-header" id="header">
 					<h5>Devices</h5>
 				</li>
-				<li class="collection-item" id="addDeviceForm">
-					<label for="deviceId">New Device ID:</label>
-					<input type="text" id="deviceId" name="deviceId" col="30">
-					<button id="registerDevice" class="waves-effect waves-light btn">Register</button> 
-					<button id="cancel" class="waves-effect waves-light btn">Cancel</button> 
-				</li>
-				<li class="collection-item" id="addDeviceControl"><a href="#!" id="addDevice">Add Device</a></li>
 			</ul>
 			<div class='red-text text-darken-2' id="error"></div>
 		</div>

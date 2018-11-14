@@ -38,7 +38,7 @@ router.post('/register', function (req, res, next) {
 						newUVFit.save(function (err, user) {
 							if (err) {
 								// Error can occur if a duplicate email is sent
-								return res.status(400).json({ success: false, message: err.errmsg });
+								return res.status(400).json({ success: false, error: err.errmsg });
 							}
 							else {
 								return res.status(201).json({ success: true, message: "UVFit (" + req.body.deviceId + ") registered  for " + user.email + " with apiKey " + hash })
@@ -55,7 +55,7 @@ router.post('/register', function (req, res, next) {
 router.get("/", function (req, res, next) {
 	UVFit.find({}, function (err, allData) {
 		if (err) {
-			return res.status(500).json({ success: false, message: err.errmsg });
+			return res.status(500).json({ success: false, error: err.errmsg });
 		}
 		else {
 			return res.status(200).json({ success: true, uvFitData: allData });
@@ -66,7 +66,7 @@ router.get("/", function (req, res, next) {
 router.get("/:email", function (req, res, next) {
 	UVFit.find({ email: req.params.email }, function (err, uvFit) {
 		if (err) {
-			return res.status(500).json({ success: false, message: err.errmsg });
+			return res.status(500).json({ success: false, error: err.errmsg });
 		}
 		else {
 			return res.status(200).json({ success: true, uvFitData: uvFit });
@@ -76,12 +76,12 @@ router.get("/:email", function (req, res, next) {
 
 // TODO: Implement PUT method on /uvfit/
 router.put("/update/:email", function (req, res, next) {
-	return res.status(501).json({ success: false, message: "UVFit PUT endpoint not implemented." });
+	return res.status(501).json({ success: false, error: "UVFit PUT endpoint not implemented." });
 });
 
 // TODO: Implement DELETE method on /uvfit/
 router.delete("/delete/:email", function (req, res, next) {
-	return res.status(501).json({ success: false, message: "UVFit DELETE endpoint not implemented." });
+	return res.status(501).json({ success: false, error: "UVFit DELETE endpoint not implemented." });
 });
 
 // Set up the export

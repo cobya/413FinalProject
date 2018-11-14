@@ -57,12 +57,12 @@ router.post('/login', function (req, res, next) {
 router.post('/register', function (req, res, next) {
 	// Ensure correct POST method
 	if (!req.is('application/json')) {
-		return res.status(400).json({ success: false, message: "Invalid POST. It should be application/json." });
+		return res.status(400).json({ success: false, error: "Invalid POST. It should be application/json." });
 	}
 
 	// Make sure all params exist
 	if (!req.body.hasOwnProperty("email") || !req.body.hasOwnProperty("fullName") || !req.body.hasOwnProperty("password")) {
-		return res.status(400).json({ success: false, message: "Please enter all necessary parameters." });
+		return res.status(400).json({ success: false, error: "Please enter all necessary parameters." });
 	}
 
 	// Validate email addresses
@@ -70,7 +70,7 @@ router.post('/register', function (req, res, next) {
 	var reEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 	if (!reEmail.test(req.body.email)) {
 		// Error can occur if a duplicate email is sent. We won't worry about it for now
-		return res.status(400).json({ success: false, message: "Invalid email address." });
+		return res.status(400).json({ success: false, error: "Invalid email address." });
 	}
 
 	// Validate password criteria of 8 chars, upper case, lower case, 1 number
@@ -82,7 +82,7 @@ router.post('/register', function (req, res, next) {
 		passwordValid = false;
 	}
 	if (!passwordValid) {
-		return res.status(400).json({ success: false, message: "Invalid password. Ensure your password meets our password criteria." });
+		return res.status(400).json({ success: false, error: "Invalid password. Ensure your password meets our password criteria." });
 	}
 
 	// If all items validate, create new user
@@ -96,7 +96,7 @@ router.post('/register', function (req, res, next) {
 
 		newUser.save(function (err, user) {
 			if (err) {
-				return res.status(500).json({ success: false, message: err.errmsg });
+				return res.status(500).json({ success: false, error: err.errmsg });
 			}
 			else {
 				return res.status(201).json({ success: true, message: "Account for " + user.fullName + " (" + user.email + ") has been created." });
@@ -109,7 +109,7 @@ router.post('/register', function (req, res, next) {
 router.get("/", function (req, res, next) {
 	UVFitUser.find({}, function (err, users) {
 		if (err) {
-			return res.status(500).json({ success: false, message: err.errmsg });
+			return res.status(500).json({ success: false, error: err.errmsg });
 		}
 		else {
 			return res.status(200).json({ success: true, registeredUsers: users });
@@ -120,7 +120,7 @@ router.get("/", function (req, res, next) {
 router.get("/:email", function (req, res, next) {
 	UVFitUser.find({ email: req.params.email }, function (err, user) {
 		if (err) {
-			return res.status(500).json({ success: false, message: err.errmsg });
+			return res.status(500).json({ success: false, error: err.errmsg });
 		}
 		else {
 			return res.status(200).json({ success: true, registeredUser: user });
@@ -140,7 +140,7 @@ router.put("/update/:email", function (req, res, next) {
 		else {
 			// Make sure all params exist
 			if (!req.body.hasOwnProperty("fullName") || !req.body.hasOwnProperty("password")) {
-				return res.status(400).json({ success: false, message: "Please enter all necessary parameters." });
+				return res.status(400).json({ success: false, error: "Please enter all necessary parameters." });
 			}
 
 			// Validate email addresses
@@ -148,7 +148,7 @@ router.put("/update/:email", function (req, res, next) {
 			var reEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
 			if (!reEmail.test(req.params.email)) {
 				// Error can occur if a duplicate email is sent. We won't worry about it for now
-				return res.status(400).json({ success: false, message: "Invalid email address." });
+				return res.status(400).json({ success: false, error: "Invalid email address." });
 			}
 
 			// Validate password criteria of 8 chars, upper case, lower case, 1 number
@@ -160,7 +160,7 @@ router.put("/update/:email", function (req, res, next) {
 				passwordValid = false;
 			}
 			if (!passwordValid) {
-				return res.status(400).json({ success: false, message: "Invalid password. Ensure your password meets our password criteria." });
+				return res.status(400).json({ success: false, error: "Invalid password. Ensure your password meets our password criteria." });
 			}
 
 			// If all items validate, update user
@@ -170,7 +170,7 @@ router.put("/update/:email", function (req, res, next) {
 
 				user.save(function (err, user) {
 					if (err) {
-						return res.status(500).json({ success: false, message: err.errmsg });
+						return res.status(500).json({ success: false, error: err.errmsg });
 					}
 					else {
 						return res.status(204).json({ success: true, message: "Account for " + user.email + " has been updated." });

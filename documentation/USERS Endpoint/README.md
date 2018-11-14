@@ -9,7 +9,7 @@ To get information on all registered users,
 2. Expected return is a JSON object with the following parameters:
     1. success: boolean
     2. error: string containing error details. exists only if success is false.
-    3. registeredUsers: Array containing the information for all registered users. exists only if error does not exist.
+    3. registeredUsers: Array containing the information for all registered users. exists only if success is true.
 
 ### /users/:email/ GET
 
@@ -19,7 +19,7 @@ To get information on a registered user,
 3. Expected return is a JSON object with the following parameters:
     1. success: boolean
     2. error: string containing error details. exists only if success is false.
-    3. registeredUsers: Array containing the information for all registered users. exists only if error does not exist.
+    3. registeredUsers: Array containing the information for all registered users. exists only if success is true.
 
 ### /users/register POST
 
@@ -33,7 +33,7 @@ To register a new account,
 3. Expected return is a JSON object with the following parameters:
     1. success: boolean
     2. error: string containing error details. exists only if success is false.
-    3. message: string containing outcome. exists only if error does not exist.
+    3. message: string containing outcome. exists only if success is true.
 
 ### /users/update/:email/ PUT
 To update an existing account,
@@ -45,7 +45,7 @@ To update an existing account,
 4. Expected return is a JSON object with the following parameters:
     1. success: boolean
     2. error: string containing error details. exists only if success is false.
-    3. message: string containing outcome. exists only if error does not exist.
+    3. message: string containing outcome. exists only if success is true.
 
 ### /users/delete/:email/ DELETE
 1. "Content-type" header should be set to "application/json"
@@ -53,4 +53,4 @@ To update an existing account,
 3. Expected return is a JSON object with the following parameters:
     1. success: boolean
     2. error: string containing error details. exists only if success is false.
-    3. message: string containing outcome. exists only if error does not exist.
+    3. message: string containing outcome. exists only if success is true.

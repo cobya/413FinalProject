@@ -3,6 +3,7 @@ var router = express.Router();
 var fs = require('fs');
 var UVFitData = require("../models/uvfitdata");
 var UVFit = require("../models/uvfit");
+var Activity = require("../models/activity");
 var bcrypt = require("bcrypt-nodejs");
 var jwt = require("jwt-simple");
 
@@ -46,6 +47,36 @@ router.post('/submit', function (req, res, next) {
 						activityId: req.body.activityId
 					});
 				}
+
+				// make an activity entry if one does not exist, else update duration
+				Activity.findOne({deviceId: req.body.deviceId, activityId: req.body.activityId}, function(err, activity) {
+					if (activity) {
+						activity.duration = req.body.timestamp - activity.activityStart;
+						if (req.body.measuredSpeed < 5.0) {
+							activity.activityType = "Walking";
+							activity.caloriesBurned = activity.duration * 0.05;
+						} else if (req.body.measuredSpeed >= 5.0 && req.body.measuredSpeed <= 10.0) {
+							activity.activityType = "Running";
+							activity.caloriesBurned = activity.duration * 0.10;
+						} else {
+							activity.activityType = "Biking";
+							activity.caloriesBurned = activity.duration * 0.15;
+						}
+
+						activity.save();
+					} else {
+						var newActivity = new Activity({
+							deviceId: req.body.deviceId, 
+							activityId: req.body.activityId, 
+							duration: 0.0, 
+							activityStart = req.body.timeStamp, 
+							caloriesBurned = 0.0,
+							activityType = "Walking"
+						});
+
+						newActivity.save();
+					}
+				});
 
 				newUVFitEntry.save(function (err, user) {
 					if (err) {

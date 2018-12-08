@@ -8,7 +8,7 @@ var jwt = require("jwt-simple");
 
 // Insert new UV Fit data entries
 router.post('/submit', function (req, res, next) {
-	if (!req.body.hasOwnProperty("deviceId") || !req.body.hasOwnProperty("apiKey") || !req.body.hasOwnProperty("gpsX") || !req.body.hasOwnProperty("gpsY") || !req.body.hasOwnProperty("measuredSpeed") || !req.body.hasOwnProperty("measuredUV")) {
+	if (!req.body.hasOwnProperty("deviceId") || !req.body.hasOwnProperty("apiKey") || !req.body.hasOwnProperty("activityId") || !req.body.hasOwnProperty("gpsX") || !req.body.hasOwnProperty("gpsY") || !req.body.hasOwnProperty("measuredSpeed") || !req.body.hasOwnProperty("measuredUV")) {
 		return res.status(400).json({ success: false, error: "Please enter all necessary parameters." });
 	}
 
@@ -32,7 +32,8 @@ router.post('/submit', function (req, res, next) {
 						gpsLocationY: req.body.gpsY,
 						measuredSpeed: req.body.measuredSpeed,
 						measuredUV: req.body.measuredUV,
-						timeCollected: req.body.timeStamp
+						timeCollected: req.body.timeStamp,
+						activityId: req.body.activityId
 					});
 				}
 				else {
@@ -41,7 +42,8 @@ router.post('/submit', function (req, res, next) {
 						gpsLocationX: req.body.gpsX,
 						gpsLocationY: req.body.gpsY,
 						measuredSpeed: req.body.measuredSpeed,
-						measuredUV: req.body.measuredUV
+						measuredUV: req.body.measuredUV,
+						activityId: req.body.activityId
 					});
 				}
 

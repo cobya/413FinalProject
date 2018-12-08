@@ -21,8 +21,12 @@ router.get("/:email", function (req, res, next) {
 	return res.status(501).json({ success: false, error: "Activity GET endpoint not implemented." });
 });
 
+router.get("/recent/:email", function (req, res, next) {
+	return res.status(501).json({ success: false, error: "Activity GET endpoint not implemented." });
+});
+
 // Implement PUT method on /activity/
-router.put("/update/:email", function (req, res, next) {
+router.put("/update/:id", function (req, res, next) {
 	return res.status(501).json({ success: false, error: "Activity PUT endpoint not implemented." });
 });
 

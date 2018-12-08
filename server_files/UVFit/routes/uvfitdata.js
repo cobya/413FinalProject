@@ -117,6 +117,17 @@ router.get("/:deviceId", function (req, res, next) {
 	});
 });
 
+router.get("/:deviceId/:activityId", function (req, res, next) {
+	UVFitData.find({ deviceId: req.params.deviceId, activityId: req.params.activityId }, function (err, deviceData) {
+		if (err) {
+			return res.status(500).json({ success: false, error: err.errmsg });
+		}
+		else {
+			return res.status(200).json({ success: true, submittedData: deviceData });
+		}
+	});
+});
+
 // TODO: Implement PUT method on /uvfitdata/
 router.put("/update/:deviceId", function (req, res, next) {
 	return res.status(501).json({ success: false, error: "UVFitData PUT endpoint not implemented." });

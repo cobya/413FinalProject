@@ -90,6 +90,11 @@ function registerResponse() {
 	if (this.status == 201) {
 		$("#registerInfo").show();
 		$("#registerInfo").html("<p>" + this.response.message + "</p");
+		localStorage.setItem("deviceId", this.response.deviceId)
+		localStorage.setItem("apiKey", this.response.apiKey)
+		setTimeout(function () {
+			location.reload();
+		}, 2500);
 	} else {
 		$("#regUpdateInfo").show();
 		$("#regUpdateInfo").html("<p>" + "Error: " + this.response.error + "</p>");
@@ -99,7 +104,7 @@ function registerResponse() {
 // allow update of UV fit on a user acct
 function updateUVFit() {
 	console.log("Attempt UV Fit update");
-	var enteredId = $("#uvFitDeviceIdReg").val();
+	var enteredId = $("#uvFitDeviceIdUpdate").val();
 	if (!enteredId) return;
 	$("#regUpdateInfo").hide();
 
@@ -113,10 +118,12 @@ function updateUVFit() {
 
 // handle update UV fit response
 function updateResponse() {
-	// 201 is successful update
-	if (this.status == 204) {
-		$("#registerInfo").show();
-		$("#registerInfo").html("<p>" + this.response.message + "</p");
+	// 204 is successful update
+	if (this.status == 202) {
+		console.log(this)
+		localStorage.setItem("deviceId", this.response.deviceId)
+		localStorage.setItem("apiKey", this.response.apiKey)
+		location.reload();
 	} else {
 		$("#regUpdateInfo").show();
 		$("#regUpdateInfo").html("<p>" + "Error: " + this.response.error + "</p>");

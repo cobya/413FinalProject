@@ -41,7 +41,7 @@ router.post('/register', function (req, res, next) {
 								return res.status(400).json({ success: false, error: err.errmsg });
 							}
 							else {
-								return res.status(201).json({ success: true, message: "UVFit (" + req.body.deviceId + ") registered  for " + user.email + " with apiKey " + hash })
+								return res.status(201).json({ success: true, message: "UVFit (" + req.body.deviceId + ") registered  for " + user.email + " with apiKey " + hash, apiKey: hash, deviceId: req.body.deviceId });
 							}
 						});
 					});
@@ -74,9 +74,36 @@ router.get("/:email", function (req, res, next) {
 	});
 });
 
-// TODO: Implement PUT method on /uvfit/
+// Implement PUT method on /uvfit/
 router.put("/update/:email", function (req, res, next) {
-	return res.status(501).json({ success: false, error: "UVFit PUT endpoint not implemented." });
+	UVFit.findOne({ email: req.params.email }, function (err, device) {
+		if (err) {
+			return res.status(500).json({ success: false, error: err.errmsg });
+		}
+		else if (!device) {
+			return res.status(400).json({ success: false, error: "No device for that email." });
+		}
+		else if (device) {
+			if (req.body.deviceId) {
+				bcrypt.hash(req.body.deviceId, null, null, function (err, hash) {
+					if (err) {
+						return res.status(500).json({ success: false, error: err.errmsg });
+					}
+					device.apiKey = hash;
+					device.deviceId = req.body.deviceId;
+
+					device.save(function (err, dev) {
+						if (err) {
+							return res.status(500).json({ success: false, error: err.errmsg });
+						}
+						else {
+							return res.status(202).json({ success: true, apiKey: hash, deviceId: req.body.deviceId });
+						}
+					});
+				});
+			}
+		}
+	});
 });
 
 // TODO: Implement DELETE method on /uvfit/

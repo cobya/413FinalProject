@@ -118,7 +118,7 @@ function updateUVFit() {
 
 // handle update UV fit response
 function updateResponse() {
-	// 204 is successful update
+	// 202 is successful update
 	if (this.status == 202) {
 		console.log(this)
 		localStorage.setItem("deviceId", this.response.deviceId)

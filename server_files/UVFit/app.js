@@ -12,6 +12,7 @@ var app = express();
 var dataRouter = require('./routes/uvfitdata');
 var uvFitRouter = require('./routes/uvfit');
 var usersRouter = require('./routes/users');
+var activityRouter = require('./routes/activity');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -30,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/uvfitdata', dataRouter);
 app.use('/uvfit', uvFitRouter);
 app.use('/users', usersRouter);
+app.use('/activity', activityRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

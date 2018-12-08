@@ -14,15 +14,39 @@ router.post('/create', function (req, res, next) {
 
 // Implement GET method on /uvfit/
 router.get("/", function (req, res, next) {
-	return res.status(501).json({ success: false, error: "Activity GET endpoint not implemented." });
+	Activity.find({}, function (err, allActivities) {
+		if (err) {
+			return res.status(500).json({ success: false, error: err.errmsg });
+		}
+		else {
+			return res.status(200).json({ success: true, data: allActivities });
+		}
+	});
 });
 
-router.get("/:email", function (req, res, next) {
-	return res.status(501).json({ success: false, error: "Activity GET endpoint not implemented." });
+router.get("/:deviceId", function (req, res, next) {
+	Activity.find({deviceId: req.params.deviceId}, function (err, allActivities) {
+		if (err) {
+			return res.status(500).json({ success: false, error: err.errmsg });
+		}
+		else {
+			return res.status(200).json({ success: true, data: allActivities });
+		}
+	});
 });
 
-router.get("/recent/:email", function (req, res, next) {
-	return res.status(501).json({ success: false, error: "Activity GET endpoint not implemented." });
+router.get("/recent/:deviceId", function (req, res, next) {
+	var today = new Date();
+  var lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
+
+	Activity.find({deviceId: req.params.deviceId, activityStart: {$gte: lastWeek}}, function (err, allActivities) {
+		if (err) {
+			return res.status(500).json({ success: false, error: err.errmsg });
+		}
+		else {
+			return res.status(200).json({ success: true, data: allActivities });
+		}
+	});
 });
 
 // Implement PUT method on /activity/

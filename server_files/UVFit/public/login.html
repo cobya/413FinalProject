@@ -44,19 +44,39 @@
 	</nav>
 
 	<!-- Login Form -->
-	<div class="form-group">
-		<label for="emailAddress">Email Address</label>
-		<input type="text" class="form-control" name="emailAddress" id="emailAddress" placeholder="test@xyz.com">
-	</div>
-	<div class="form-group">
-		<label for="password">Password</label>
-		<input type="password" class="form-control" id="password" name="password" maxlength="50">
-	</div>
-	<input type="submit" class="btn btn-primary" id="loginButton" value="Login">
-	<div id="loginErrors"></div>
-
-	<div>
-		<a href="register.html">Don't have an account? Register one.</a>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-sm">
+				<div class="jumbotron jumbotron-fluid">
+					<div class="container">
+						<h1 class="display-4">UVFit Login</h1>
+						<a class="lead" href="register.html">Don't have an account? Register one.</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm">
+				<div class="form-group">
+					<label for="emailAddress">Email Address</label>
+					<input type="text" class="form-control" name="emailAddress" id="emailAddress" placeholder="test@xyz.com">
+				</div>
+			</div>
+			<div class="col-sm">
+				<div class="form-group">
+					<label for="password">Password</label>
+					<input type="password" class="form-control" id="password" name="password" maxlength="50">
+				</div>
+			</div>
+		</div>
+		<div class="row justify-content-center">
+			<div class="col-sm text-center">
+				<input type="submit" class="btn btn-primary btn-lg" id="loginButton" value="Login">
+			</div>
+		</div>
+		<div class="row justify-content-center">
+			<div class="col-sm-10 text-center" id="loginErrors"></div>
+		</div>
 	</div>
 
 </body>

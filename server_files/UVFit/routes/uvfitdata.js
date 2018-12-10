@@ -49,7 +49,7 @@ router.post('/submit', function (req, res, next) {
 				}
 
 				// make an activity entry if one does not exist, else update duration
-				Activity.findOne({deviceId: req.body.deviceId, activityId: req.body.activityId}, function(err, activity) {
+				Activity.findOne({ deviceId: req.body.deviceId, activityId: req.body.activityId }, function (err, activity) {
 					if (activity) {
 						activity.duration = req.body.timestamp - activity.activityStart;
 						if (req.body.measuredSpeed < 5.0) {
@@ -66,12 +66,12 @@ router.post('/submit', function (req, res, next) {
 						activity.save();
 					} else {
 						var newActivity = new Activity({
-							deviceId: req.body.deviceId, 
-							activityId: req.body.activityId, 
-							duration: 0.0, 
-							activityStart = req.body.timeStamp, 
-							caloriesBurned = 0.0,
-							activityType = "Walking"
+							deviceId: req.body.deviceId,
+							activityId: req.body.activityId,
+							duration: 0.0,
+							activityStart: req.body.timeStamp,
+							caloriesBurned: 0.0,
+							activityType: "Walking"
 						});
 
 						newActivity.save();

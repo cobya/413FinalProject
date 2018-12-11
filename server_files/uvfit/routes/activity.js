@@ -50,8 +50,30 @@ router.get("/recent/:deviceId", function (req, res, next) {
 });
 
 // Implement PUT method on /activity/
-router.put("/update/:id", function (req, res, next) {
-	return res.status(501).json({ success: false, error: "Activity PUT endpoint not implemented." });
+router.put("/update/:deviceId/:activityId", function (req, res, next) {
+	if (!req.body.hasOwnProperty("activityType")) {
+		return res.status(400).json({success: false, error: "Need to include activityType."});
+	}
+
+	Activity.findOne({ deviceId: req.body.deviceId, activityId: req.body.activityId }, function (err, activity) {
+		if (err) {
+			return res.status(500).json({success: false, error: err.errmsg})
+		} else if (activity) {
+			if (req.body.activityType == "Walking") {
+				activity.caloriesBurned = activity.duration * 7.6;
+			} else if (req.body.activityType == "Running") {
+				activity.caloriesBurned = activity.duration * 13.2;
+			} else if (req.body.activityType == "Biking") {
+				activity.caloriesBurned = activity.duration * 9.0;
+			} else {
+				return res.status(400).json({success: false, error: "Invalid activityType specified."});
+			}
+			activity.save();
+			return res.status(204).json({success: true, message: "Activity type updated."});
+		} else {
+			return res.status(400).json({success: false, error: "Invalid ID specified."});
+		}
+	});
 });
 
 // TODO: Implement DELETE method on /activity/

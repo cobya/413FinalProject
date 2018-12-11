@@ -9,6 +9,7 @@ var jwt = require("jwt-simple");
 
 // Insert new UV Fit data entries
 router.post('/submit', function (req, res, next) {
+	console.log(req.body)
 	if (!req.body.hasOwnProperty("deviceId") || !req.body.hasOwnProperty("apiKey") || !req.body.hasOwnProperty("activityId") || !req.body.hasOwnProperty("gpsX") || !req.body.hasOwnProperty("gpsY") || !req.body.hasOwnProperty("measuredSpeed") || !req.body.hasOwnProperty("measuredUV")) {
 		return res.status(400).json({ success: false, error: "Please enter all necessary parameters." });
 	}
@@ -26,6 +27,7 @@ router.post('/submit', function (req, res, next) {
 			if (req.body.apiKey == uvFit.apiKey) {
 				// create a new data entry and save it
 				var newUVFitEntry;
+				var dataTime
 				if (req.body.hasOwnProperty("timeStamp")) {
 					newUVFitEntry = new UVFitData({
 						deviceId: req.body.deviceId,
@@ -36,6 +38,7 @@ router.post('/submit', function (req, res, next) {
 						timeCollected: req.body.timeStamp,
 						activityId: req.body.activityId
 					});
+					dataTime = req.body.timeStamp
 				}
 				else {
 					newUVFitEntry = new UVFitData({
@@ -46,21 +49,22 @@ router.post('/submit', function (req, res, next) {
 						measuredUV: req.body.measuredUV,
 						activityId: req.body.activityId
 					});
+					dataTime = Date.now()
 				}
 
 				// make an activity entry if one does not exist, else update duration
 				Activity.findOne({ deviceId: req.body.deviceId, activityId: req.body.activityId }, function (err, activity) {
 					if (activity) {
-						activity.duration = req.body.timestamp - activity.activityStart;
+						activity.duration = (dataTime - activity.activityStart) * (1.0/60000.0);
 						if (req.body.measuredSpeed < 5.0) {
 							activity.activityType = "Walking";
-							activity.caloriesBurned = activity.duration * 0.05;
+							activity.caloriesBurned = activity.duration * 7.6;
 						} else if (req.body.measuredSpeed >= 5.0 && req.body.measuredSpeed <= 10.0) {
 							activity.activityType = "Running";
-							activity.caloriesBurned = activity.duration * 0.10;
+							activity.caloriesBurned = activity.duration * 13.2;
 						} else {
 							activity.activityType = "Biking";
-							activity.caloriesBurned = activity.duration * 0.15;
+							activity.caloriesBurned = activity.duration * 9.0;
 						}
 
 						activity.save();
@@ -69,7 +73,7 @@ router.post('/submit', function (req, res, next) {
 							deviceId: req.body.deviceId,
 							activityId: req.body.activityId,
 							duration: 0.0,
-							activityStart: req.body.timeStamp,
+							activityStart: dataTime,
 							caloriesBurned: 0.0,
 							activityType: "Walking"
 						});

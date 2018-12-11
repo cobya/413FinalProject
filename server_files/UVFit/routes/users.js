@@ -181,6 +181,145 @@ router.put("/update/:email", function (req, res, next) {
 	});
 });
 
+// Implement PUT method on /users/
+router.put("/updateemail/:email", function (req, res, next) {
+	UVFitUser.findOne({ email: req.params.email }, function (err, user) {
+		if (err) {
+			return res.status(500).json({ success: false, error: "Error communicating with database." });
+		}
+		else if (!user) {
+			return res.status(401).json({ success: false, error: "The email provided was invalid." });
+		}
+		else {
+			// Make sure all params exist
+			if (!req.body.hasOwnProperty("email")) {
+				return res.status(400).json({ success: false, error: "Please enter the updated email." });
+			}
+
+			// Validate email addresses
+			var emailValid = true;
+			var reEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+			if (!reEmail.test(req.body.email)) {
+				// Error can occur if a duplicate email is sent. We won't worry about it for now
+				return res.status(400).json({ success: false, error: "Invalid email address." });
+			}
+
+			// If all items validate, update user
+			user.email = req.body.email;
+
+			user.save(function (err, user) {
+				if (err) {
+					return res.status(500).json({ success: false, error: err.errmsg });
+				}
+				else {
+					return res.status(204).json({ success: true, message: "Account for " + user.email + " has been updated." });
+				}
+			});
+		}
+	});
+});
+
+// Implement PUT method on /users/
+router.put("/updatename/:email", function (req, res, next) {
+	UVFitUser.findOne({ email: req.params.email }, function (err, user) {
+		if (err) {
+			return res.status(500).json({ success: false, error: "Error communicating with database." });
+		}
+		else if (!user) {
+			return res.status(401).json({ success: false, error: "The email provided was invalid." });
+		}
+		else {
+			// Make sure all params exist
+			if (!req.body.hasOwnProperty("fullName")) {
+				return res.status(400).json({ success: false, error: "Please enter the updated email." });
+			}
+
+			// If all items validate, update user
+			user.fullName = req.body.fullName;
+
+			user.save(function (err, user) {
+				if (err) {
+					return res.status(500).json({ success: false, error: err.errmsg });
+				}
+				else {
+					return res.status(204).json({ success: true, message: "Account for " + user.email + " has been updated." });
+				}
+			});
+		}
+	});
+});
+
+router.put("/updatepass/:email", function (req, res, next) {
+	UVFitUser.findOne({ email: req.params.email }, function (err, user) {
+		if (err) {
+			return res.status(500).json({ success: false, error: "Error communicating with database." });
+		}
+		else if (!user) {
+			return res.status(401).json({ success: false, error: "The email provided was invalid." });
+		}
+		else {
+			// Make sure all params exist
+			if (!req.body.hasOwnProperty("password")) {
+				return res.status(400).json({ success: false, error: "Please enter a new password." });
+			}
+
+			// Validate password criteria of 8 chars, upper case, lower case, 1 number
+			var passwordValid = true;
+			var reLowerCase = /[a-z]/;
+			var reUpperCase = /[A-Z]/;
+			var reNumber = /[0-9]/;
+			if (req.body.password.length < 8 || !reLowerCase.test(req.body.password) || !reUpperCase.test(req.body.password) || !reNumber.test(req.body.password)) {
+				passwordValid = false;
+			}
+			if (!passwordValid) {
+				return res.status(400).json({ success: false, error: "Invalid password. Ensure your password meets our password criteria." });
+			}
+
+			// If all items validate, update user
+			bcrypt.hash(req.body.password, null, null, function (err, hash) {
+				user.passwordHash = hash;
+
+				user.save(function (err, user) {
+					if (err) {
+						return res.status(500).json({ success: false, error: err.errmsg });
+					}
+					else {
+						return res.status(204).json({ success: true, message: "Account for " + user.email + " has been updated." });
+					}
+				});
+			});
+		}
+	});
+});
+
+router.put("/updatethres/:email", function (req, res, next) {
+	UVFitUser.findOne({ email: req.params.email }, function (err, user) {
+		if (err) {
+			return res.status(500).json({ success: false, error: "Error communicating with database." });
+		}
+		else if (!user) {
+			return res.status(401).json({ success: false, error: "The email provided was invalid." });
+		}
+		else {
+			// Make sure all params exist
+			if (!req.body.hasOwnProperty("threshold")) {
+				return res.status(400).json({ success: false, error: "Please enter a new threshold." });
+			}
+
+			// If all items validate, update user
+			user.exposureAlert = req.body.threshold;
+			user.save(function (err, user) {
+				if (err) {
+					return res.status(500).json({ success: false, error: err.errmsg });
+				}
+				else {
+					return res.status(204).json({ success: true, message: "Account for " + user.email + " has been updated." });
+				}
+			});
+		}
+	});
+});
+
 // Implement DELETE method on /users/
 router.delete("/delete/:email", function (req, res, next) {
 	UVFitUser.deleteOne({ email: req.params.email }, function (err, user) {

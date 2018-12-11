@@ -43,38 +43,74 @@
 		</div>
 	</nav>
 
-	<!-- Current UV Fit Device Info -->
-	<div id="currDevInfo">
-		<p id="pDevId"></p>
-		<p id="pApiKey"></p>
-	</div>
-
-	<!-- Allow users to sign out -->
-	<div id="signout">
-		<input type="submit" id="signoutButton" value="Sign Out">
-	</div>
-
-	<!-- Register UV Fit Form -->
-	<div id="registerUVFit">
-		<label for="uvFitDeviceIdReg">UV Fit Device ID</label>
-		<input type="text" name="uvFitDeviceIdReg" id="uvFitDeviceIdReg" placeholder="">
+	<div class="continer-fluid justify-content-center text-center">
 		<br>
-		<input type="submit" id="registerUVFitButton" value="Register UVFit">
+		<div class="row">
+			<div class="col">
+				<input type="submit" class="btn btn-primary btn-lg" id="signoutButton" value="Sign Out">
+			</div>
+		</div>
+		<h1 class="display-4">UVFit Login</h1>
+		<div class="row">
+			<div class="col-sm">
+				<p id="pAcctEmail"></p>
+			</div>
+			<div class="col-sm">
+				<p id="pAcctName"></p>
+			</div>
+			<div class="col-sm">
+				<p id="pAcctThreshold"></p>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm">
+				<p id="pDevId" style="word-break: break-all;"></p>
+			</div>
+			<div class="col-sm">
+				<p id="pApiKey" style="word-break: break-all;"></p>
+			</div>
+		</div>
+		<div class="row" id="registerUVFit">
+			<!-- Register UV Fit Form -->
+			<div class="col-sm">
+				<label for="uvFitDeviceIdReg">Register UV Fit Device ID</label>
+				<input type="text" name="uvFitDeviceIdReg" id="uvFitDeviceIdReg" placeholder="">
+			</div>
+			<div class="col-sm">
+				<input type="submit" id="registerUVFitButton" value="Register UVFit">
+			</div>
+		</div>
+		<div class="row" id="updateUVFit">
+			<!-- Update UV Fit Form -->
+			<div class="col-sm">
+				<label for="uvFitDeviceIdUpdate">Update UV Fit Device ID</label>
+				<input type="text" name="uvFitDeviceIdUpdate" id="uvFitDeviceIdUpdate" placeholder="">
+			</div>
+			<div class="col-sm">
+				<input type="submit" class="btn btn-primary btn" id="updateUVFitButton" value="Update UVFit">
+			</div>
+		</div>
+		<div class="row">
+			<!-- Combined info box for UV Fit register / update -->
+			<div id="regUpdateInfo" class="alert alert-dark" role="alert"></div>
+		</div>
+		<div class="row" id="sendUVThreshold">
+			<div class="col-sm">
+				<label for="thresholdUpdate">Set Threshold</label>
+				<input type="text" name="thresholdUpdate" id="thresholdUpdate" placeholder="">
+			</div>
+			<div class="col-sm">
+				<label for="accessToken">UV Fit Access Token</label>
+				<input type="text" name="accessToken" id="accessToken" placeholder="">
+			</div>
+			<div class="col-sm">
+				<input type="submit" class="btn btn-primary btn" id="thresholdButton" value="Update UV Threshold">
+			</div>
+		</div>
 	</div>
-
-	<!-- Update UV Fit Form -->
-	<div id="updateUVFit">
-		<label for="uvFitDeviceIdUpdate">UV Fit Device ID</label>
-		<input type="text" name="uvFitDeviceIdUpdate" id="uvFitDeviceIdUpdate" placeholder="">
-		<br>
-		<input type="submit" id="updateUVFitButton" value="Update UVFit">
-	</div>
-
-	<!-- Combined info box for UV Fit register / update -->
-	<div id="regUpdateInfo" class="alert alert-dark" role="alert"></div>
-
+	
 	<!-- Table for showing recent UV Fit data -->
-	<div id="uvFitDataTableDiv">
+	<!-- <div id="uvFitDataTableDiv">
 		<table class="table table-striped" id="uvFitDataTable">
 			<th>Timestamp</th>
 			<th>Latitude</th>
@@ -82,7 +118,7 @@
 			<th>Measured UV</th>
 			<th>Measured Speed</th>
 		</table>
-	</div>
+	</div> -->
 </body>
 
 </html>

@@ -80,6 +80,11 @@
                       var td2 = "<td>"+this.response.submittedData[i]["duration"].toFixed(2)+"</td>";
                       var td3 = "<td>"+this.response.submittedData[i]["caloriesBurned"].toFixed(2)+"</td>";
                       var td4 = "<td>"+this.response.submittedData[i]["totalUV"].toFixed(2)+"</td>";
+                      var td4.5 = "<td><ul id="dropdown2" class="dropdown-content">
+                                    <li id="walking">Walking</li>
+                                    <li id="running">Running</li>
+                                    <li id="biking">Biking</li>
+                                  </ul></td>";
                       var td5 = "<td><button class=\"changeActivity\">Change Activity</button></td>";
                       
                       var xhr = new XMLHttpRequest();
@@ -107,7 +112,7 @@
                   	xhr.setRequestHeader("Content-type", "application/json");
                   	xhr.send(JSON.stringify({}));
                   	
-                  	$("#activityTable").append(tr+td1+td2+td3+td4+td5+"</tr>");
+                  	$("#activityTable").append(tr+td1+td2+td3+td4+td4.5+td5+"</tr>");
                   }
           	});
           	xhr.responseType = "json";
@@ -131,7 +136,8 @@
         <th>Duration (Minutes)</th>
         <th>Calories Burned</th>
         <th>Total UV</th>
-        <th></th>
+        <th>  dropdown </th>
+        <th>  changes  </th>
       </table>
     </div>
   </body>

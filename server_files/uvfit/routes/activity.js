@@ -19,7 +19,7 @@ router.get("/", function (req, res, next) {
 			return res.status(500).json({ success: false, error: err.errmsg });
 		}
 		else {
-			return res.status(200).json({ success: true, data: allActivities });
+			return res.status(200).json({ success: true, submittedData: allActivities });
 		}
 	});
 });
@@ -30,7 +30,7 @@ router.get("/:deviceId", function (req, res, next) {
 			return res.status(500).json({ success: false, error: err.errmsg });
 		}
 		else {
-			return res.status(200).json({ success: true, data: allActivities });
+			return res.status(200).json({ success: true, submittedData: allActivities });
 		}
 	});
 });
@@ -44,7 +44,7 @@ router.get("/recent/:deviceId", function (req, res, next) {
 			return res.status(500).json({ success: false, error: err.errmsg });
 		}
 		else {
-			return res.status(200).json({ success: true, data: allActivities });
+			return res.status(200).json({ success: true, submittedData: allActivities });
 		}
 	});
 });

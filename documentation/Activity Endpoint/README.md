@@ -1,19 +1,19 @@
-# UVFitData Endpoint
+# Activity Endpoint
 
 ## Available Interfaces
 
-### /uvfitdata/ GET
+### /activity/ GET
 
-To GET UV Fit data for all devices,
+To GET all submitted activities,
 1. "Content-type" header should be set to "application/json"
 2. Expected return is a JSON object with the following parameters:
     1. success: boolean
     2. error: string containing error details. exists only if success is false.
     3. submittedData: Array containing all submitted data entries in JSON.
 
-### /uvfitdata/:deviceId/ GET
+### /activity/recent/:deviceId/ GET
 
-To GET UV Fit data for a singular device,
+To GET activities within the last week for singular device,
 1. "Content-type" header should be set to "application/json"
 2. :deviceId in the GET address should be the Photon's device ID you are interested in the data for.
 3. Expected return is a JSON object with the following parameters:
@@ -21,19 +21,20 @@ To GET UV Fit data for a singular device,
     2. error: string containing error details. exists only if success is false.
     3. submittedData: Array containing all submitted data entries in JSON for the specified device only.
 
-### /uvfitdata/submit/ POST
+### /update/:deviceId/:activityId/ PUT
 
-To POST new UV Fit Data,
+To update an activity's type,
 1. "Content-type" header should be set to "application/json"
-2. A JSON object in the body should be passed containing the following parameters:
-    1. deviceId: string
-    2. apiKey: string
-    3. gpsX: number
-    4. gpsY: number
-    5. measuredSpeed: number
-    6. measuredUV: number
-    7. OPTIONAL timeStamp
-3. Expected return is a JSON object with the following parameters:
+2. :deviceId in the GET address should be the Photon's device ID you are interested in the data for.
+3. :activityId in the GET address should be the activity ID you are interested in the data for.
+4. A JSON object in the body should be passed containing the following parameters:
+    1. activityType: string
+5. Expected return is a JSON object with the following parameters:
     1. success: boolean
     2. error: string containing error details. exists only if success is false.
     3. message: string containing outcome.
+
+
+### /activity/update/:deviceId/ PUT
+
+### /activity/delete/:deviceId/ DELETE

@@ -34,6 +34,13 @@ To register a new UV Fit device,
     2. error: string containing error details. exists only if success is false.
     3. message: string containing outcome.
 
-### /uvfit/update/:deviceId/ PUT
-
-### /uvfit/delete/:deviceId/ DELETE
+### /uvfit/update/:email/ PUT
+To update the device associated with an account,
+1. "Content-type" header should be set to "application/json"
+2. :email in the address should be the account's email you are interested in the data for.
+3. A JSON object in the body should be passed containing the following parameters:
+    1. deviceId: string
+4. Expected return is a JSON object with the following parameters:
+    1. success: boolean
+    2. error: string containing error details. exists only if success is false.
+    3. message: string containing outcome.

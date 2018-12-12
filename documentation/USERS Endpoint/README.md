@@ -47,6 +47,39 @@ To update an existing account,
     2. error: string containing error details. exists only if success is false.
     3. message: string containing outcome. exists only if success is true.
 
+### /users/updatethres/:email/ PUT
+To update an existing account's UV threshold,
+1. "Content-type" header should be set to "application/json"
+2. :email in the PUT address should be the user's email you are interested in the data for.
+3. A JSON object in the body should be passed containing the following parameters:
+    1. threshold: string
+4. Expected return is a JSON object with the following parameters:
+    1. success: boolean
+    2. error: string containing error details. exists only if success is false.
+    3. message: string containing outcome. exists only if success is true.
+
+### /users/updatename/:email/ PUT
+To update an existing account's UV threshold,
+1. "Content-type" header should be set to "application/json"
+2. :email in the PUT address should be the user's email you are interested in the data for.
+3. A JSON object in the body should be passed containing the following parameters:
+    1. fullName: string
+4. Expected return is a JSON object with the following parameters:
+    1. success: boolean
+    2. error: string containing error details. exists only if success is false.
+    3. message: string containing outcome. exists only if success is true.
+
+### /users/updatepass/:email/ PUT
+To update an existing account's UV threshold,
+1. "Content-type" header should be set to "application/json"
+2. :email in the PUT address should be the user's email you are interested in the data for.
+3. A JSON object in the body should be passed containing the following parameters:
+    1. password: string
+4. Expected return is a JSON object with the following parameters:
+    1. success: boolean
+    2. error: string containing error details. exists only if success is false.
+    3. message: string containing outcome. exists only if success is true.
+
 ### /users/delete/:email/ DELETE
 1. "Content-type" header should be set to "application/json"
 2. :email in the DELETE address should be the user's email you are interested in the data for.

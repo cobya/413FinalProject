@@ -1,54 +1,67 @@
-#include "sysReporter.h"
-// This #include statement was automatically added by the Particle IDE.
-#include <AssetTracker.h>
+ #include "sysReporter.h"
+    #include <AssetTracker.h>
+    #include "FitnessDetector.h"
+    #include <vector>
+    #include <cstdlib>
+    #include <stdlib.h>
+    #include <time.h>
 
-#define DEBUG
-
-sysReporter::sysReporter(AssetTracker &theTracker) :
-gpsSensor(theTracker) {
-    tick = 0;
-    state = S_Wait;
-    led = D7; 
-    pinMode(led, OUTPUT);
-}
+    #define DEBUG
+    
+    sysReporter::sysReporter(FitnessDetector &theDetector) :
+    fitnessDetector(theDetector) {
+        tick = 0;
+        state = S_Wait;
+        led2 = D7; 
+        pinMode(led2, OUTPUT);
+        button = BTN;
+        state = S_Wait;
+        check = 0;
+        activityId = 0;
+        deviceId = "280033001247363336383437";
+    }
     
 void sysReporter::execute() {
     String postData;
 
-#ifdef DEBUG
-    Serial.print("sysReporter SM: ");
-    Serial.println(state);
-#endif
-
     switch (state) {
         case sysReporter::S_Wait:
             tick = 0;
-            digitalWrite(led, LOW);
-            
-            state = sysReporter::S_Publish;
+            activityId = 0;
+            digitalWrite(led2, LOW);
+            fitnessDetector.checkUV();
+            //delay(250);
+            //Serial.println("Wait");           
+            if(fitnessDetector.isDetected()) { 
+                state = sysReporter::S_Publish;
+            }
+            else {
+                state = sysReporter::S_Wait;
+            }
             break;
 
         case sysReporter::S_Publish:
-            if (gpsSensor.gpsFix()) {
-               postData = String::format("{ \"longitude\": \"%f\", \"latitude\": \"%f\" }", 
-                                         gpsSensor.readLonDeg(), gpsSensor.readLatDeg());
+            //srand(time(NULL));
+            if(Particle.connected()) {
+            activityId = fitnessDetector.getActivity();
+                for (check = 0; check < fitnessDetector.returnFitness(); check++) {
+		           postData = String::format("{\"gpsX\": \"%f\", \"gpsY\": \"%f\", \"measuredUV\": \"%d\",\"measuredSpeed\": \"%f\", \"activityId\": \"%d\"}", fitnessDetector.getLongitude().at(check), fitnessDetector.getLatitude().at(check), fitnessDetector.getUV().at(check), fitnessDetector.getSpeed().at(check), activityId);
+	            	Particle.publish("datasubmit", postData, PRIVATE);
+	            	Serial.println(postData); //ADD THIS BACK
+		            delay(250);
+		        }
+                fitnessDetector.setReported();
+                //Serial.println("Should be 0");
+                //Serial.println(fitnessDetector.isDetected());
             }
-            else {
-               postData = String::format("{ \"longitude\": \"%f\", \"latitude\": \"%f\" }", 
-                                         -110.987420, 32.248820);
-            }
-
-            Serial.println(postData);
-            Particle.publish("dataSubmit", postData);
- 
-            
             state = sysReporter::S_LedNotify;
             break;
 
         case sysReporter::S_LedNotify:
-            digitalWrite(led, HIGH);
+            //digitalWrite(led2, HIGH);
             ++tick;
-
+            //Serial.println("hello");
+            //fitnessDetector.makeZero();
             // Keep LED on for 2 seconds
             if (tick == 200) {
                 state = sysReporter::S_Wait;
@@ -59,3 +72,15 @@ void sysReporter::execute() {
             break;
     }
 }
+
+string sysReporter::getDeviceId() {
+    return this->deviceId;
+}
+
+string sysReporter::getApiKey() {
+    return this->apiKey;  
+}
+
+
+//-------------------------------------------------------------------
+

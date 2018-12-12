@@ -1,16 +1,27 @@
+// This #include statement was automatically added by the Particle IDE.
+#include "FitnessDetector.h"
+
 
 // This #include statement was automatically added by the Particle IDE.
 #include "sysReporter.h"
-
 // This #include statement was automatically added by the Particle IDE.
-#include <Adafruit_VEML6070.h>
+//#include <Adafruit_VEML6070.h>
 
 // This #include statement was automatically added by the Particle IDE.
 #include <AssetTracker.h>
+//#include <Adafruit_VEML6070.h>
+    #include <cstdlib>
+    #include <stdlib.h>
+    #include <time.h>
+    
+    
 
 //-------------------------------------------------------------------
 
 using namespace std;
+
+
+SYSTEM_THREAD(ENABLED);
 
 //-------------------------------------------------------------------
 
@@ -20,18 +31,20 @@ unsigned long lastSync = millis();
 //-------------------------------------------------------------------
 
 bool executeStateMachines = false;
+bool running = false;
  
 //-------------------------------------------------------------------
 
 AssetTracker locationTracker = AssetTracker();
+Adafruit_VEML6070 uv = Adafruit_VEML6070();
+FitnessDetector FitnessDetector(locationTracker, uv);
+sysReporter sysReporter(FitnessDetector);
+int button = BTN;
 
 //-------------------------------------------------------------------
 
 void stateMachineScheduler() {
     executeStateMachines = true;
-    locationTracker.updateGPS();
-//    potholeDetector.execute();
-    //sysReporter.execute();
 }
 
 Timer stateMachineTimer(10, stateMachineScheduler);
@@ -45,15 +58,32 @@ void responseHandler(const char *event, const char *data) {
     Serial.println(output);
 }
 
+
+int pingHandler(String data) {
+    int newPosition;
+
+    newPosition = atoi(data.c_str());
+    FitnessDetector.setUVThresh(newPosition);
+
+    return 0;
+}
+
 //-------------------------------------------------------------------
 
 void setup() {
     Serial.begin(9600);
-
+    
+    pinMode(button, INPUT);
+    
+    uv.begin(VEML6070_2_T);
+    
     // Initialize the gps and turn it on    
     locationTracker.begin();
     locationTracker.gpsOn();
     
+    Particle.connect();
+    
+    Particle.function("pingDevice", pingHandler);
     // Handler for response from POSTing location to server
     Particle.subscribe("hook-response/datasubmit", responseHandler, MY_DEVICES);
     
@@ -64,15 +94,17 @@ void setup() {
 
 void loop() {
 
-    // Request time synchronization from the Particle Cloud once per day
-    if (millis() - lastSync > ONE_DAY_MILLIS) {
-        Particle.syncTime();
-        lastSync = millis();
-    }
+            if (millis() - lastSync > ONE_DAY_MILLIS) {
+                Particle.syncTime();
+                lastSync = millis();
+            }
 
-    if (executeStateMachines) {
-        locationTracker.updateGPS();
-        Particle.publish("datasubmit", PRIVATE);
-        executeStateMachines = false;
-    }
+            if (executeStateMachines) {
+              locationTracker.updateGPS();
+              sysReporter.execute();
+              FitnessDetector.execute();
+              executeStateMachines = false;
+             }
+        
+    
 }

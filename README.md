@@ -3,7 +3,9 @@ University of Arizona ECE 413 Final Project. Coby Allred, Amanda Chesin, and All
 
 ## Server Information
 Link: http://ec2-18-220-240-77.us-east-2.compute.amazonaws.com:3000/
+
 Example Login Email: check@yesjuliet.com
+
 Example Login Password: Areyouwithme1
 
 ## Kickstarter Pitch Video

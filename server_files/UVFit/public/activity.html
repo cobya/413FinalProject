@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    
+  <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>Activity Data</title>
+    
+    <!-- Bootstrap Includes -->
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+	 crossorigin="anonymous"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+	 crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	 crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+	 crossorigin="anonymous"></script>
+	 
+	 <!-- JQuery Includes -->
+	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+  
+  <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;  /* The height is 400 pixels */
+        width: 100%;  /* The width is the width of the web page */
+       }
+    </style>
+    
+  </head>
+  
+
+  <body>
+      
+    <div id="activityData">
+        
+            <h5>Fitness Path</h5>
+                <div id="map">
+                    <script>
+                    function initMap() {
+                         // The location of the University of Arizona
+                         var uOfA = {lat: 32.2319, lng: 110.9501};
+                          
+                         // The map, centered at the University of Arizona
+                         var map = new google.maps.Map(document.getElementById('map'), {
+                                  zoom: 4,
+                                  center: uOfA,
+                                  mapTypeId: 'terrain'
+                                });
+                                
+                        // this is the format of the coordinates for the API
+                        // var activityCoordinates = [
+                        //   {lat: 37.772, lng: -122.214}
+                        // ];
+                        var activityCoordinates = [];
+                        
+                        var xhr = new XMLHttpRequest();
+                    	xhr.addEventListener("load", function(){
+                    	    for (var i = 0; i < this.response.submittedData.length; i++){
+                                var tr = "<tr>";
+                                var td1 = "<td>"+this.response.submittedData[i]["duration"]+"</td>";
+                                var td2 = "<td>"+this.response.submittedData[i]["caloriesBurned"]+"</td>";
+                                var td3 = "<td>"+this.response.submittedData[i]["measuredUV"]+"</td></tr>";
+                        
+                                
+                                var xhr = new XMLHttpRequest();
+                            	xhr.addEventListener("load", function(){
+                            	    for (var i = 0; i < this.response.submittedData.length; i++){
+                            	       activityCoordinates.push("{lat: "+this.response.submittedData[i]["gpsLocationX"]+", lng: "+this.response.submittedData[i]["gpsLocationY"]);
+                            	    }
+                            	    
+                            	    // creates a path based on those coordinates
+                                    var activityPath = new google.maps.Polyline({
+                                      path: activityCoordinates,
+                                      geodesic: true,
+                                      strokeColor: '#FF0000',
+                                      strokeOpacity: 1.0,
+                                      strokeWeight: 2
+                                    });
+                                
+                                    // the path now belongs to the map we created above
+                                    activityPath.setMap(map); 
+                            	    
+                            	});
+                            	xhr.responseType = "json";
+                            	xhr.open("GET", '/uvfitdata/' + localStorage.getItem("deviceId") + '/' + this.response.submittedData[i]["activityId"]);
+                            	xhr.setRequestHeader("Content-type", "application/json");
+                            	xhr.send(JSON.stringify({}));
+                            	
+                            	$("activityTable").append(tr+td1+td2+td3);
+                            	
+                            }
+                    	});
+                    	xhr.responseType = "json";
+                    	xhr.open("GET", '/activity/recent/' + localStorage.getItem("deviceId"));
+                    	xhr.setRequestHeader("Content-type", "application/json");
+                    	xhr.send(JSON.stringify({}));
+                        
+                    }
+                    </script>
+                <!--Load the API from the specified URL
+                * The async attribute allows the browser to render the page while the API loads
+                * The key parameter will contain your own API key (which is not needed for this tutorial)
+                * The callback parameter executes the initMap() function
+                -->
+                <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2iT9MTRQncUg57g3rfPF9YHu4BIscqx0&callback=initMap">
+                </script>
+                
+                </div>
+                
+            <table class="table table-striped" id="activityTable">
+    			<th>Duration</th>
+    			<th>Calories Burned</th>
+    			<th>Measured UV</th>
+		    </table>   
+        
+        
+    </div>
+    
+  </body>
+</html>

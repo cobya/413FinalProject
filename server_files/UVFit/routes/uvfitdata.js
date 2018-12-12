@@ -56,6 +56,7 @@ router.post('/submit', function (req, res, next) {
 				Activity.findOne({ deviceId: req.body.deviceId, activityId: req.body.activityId }, function (err, activity) {
 					if (activity) {
 						activity.duration = (dataTime - activity.activityStart) * (1.0/60000.0);
+						activity.totalUV = activity.totalUV + req.body.measuredUV;
 						if (req.body.measuredSpeed < 5.0) {
 							activity.activityType = "Walking";
 							activity.caloriesBurned = activity.duration * 7.6;
@@ -75,7 +76,8 @@ router.post('/submit', function (req, res, next) {
 							duration: 0.0,
 							activityStart: dataTime,
 							caloriesBurned: 0.0,
-							activityType: "Walking"
+							activityType: "Walking",
+							totalUV: req.body.measuredUV
 						});
 
 						newActivity.save();

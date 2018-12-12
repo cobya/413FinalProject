@@ -55,16 +55,19 @@ router.put("/update/:deviceId/:activityId", function (req, res, next) {
 		return res.status(400).json({success: false, error: "Need to include activityType."});
 	}
 
-	Activity.findOne({ deviceId: req.body.deviceId, activityId: req.body.activityId }, function (err, activity) {
+	Activity.findOne({ deviceId: req.params.deviceId, activityId: req.params.activityId }, function (err, activity) {
 		if (err) {
 			return res.status(500).json({success: false, error: err.errmsg})
 		} else if (activity) {
 			if (req.body.activityType == "Walking") {
 				activity.caloriesBurned = activity.duration * 7.6;
+				activity.activityType = req.body.activityType;
 			} else if (req.body.activityType == "Running") {
 				activity.caloriesBurned = activity.duration * 13.2;
+				activity.activityType = req.body.activityType;
 			} else if (req.body.activityType == "Biking") {
 				activity.caloriesBurned = activity.duration * 9.0;
+				activity.activityType = req.body.activityType;
 			} else {
 				return res.status(400).json({success: false, error: "Invalid activityType specified."});
 			}

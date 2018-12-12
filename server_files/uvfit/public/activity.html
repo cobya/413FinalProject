@@ -16,6 +16,7 @@
     <!-- JQuery Includes -->
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="/javascripts/jquery-dateformat.js"></script>
+    <script type="text/javascript" src="/javascripts/activity.js"></script>
     <style>
       /* Set the size of the div element that contains the map */
       #map {
@@ -35,21 +36,28 @@
       <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <a class="nav-item nav-link" href="index.html">Home<span class="sr-only">(current)</span></a>
-          <a class="nav-item nav-link active" href="dashboard.html">Dashboard</a>
-          <a class="nav-item nav-link" href="activity.html">Activity View</a>
+          <a class="nav-item nav-link" href="dashboard.html">Dashboard</a>
+          <a class="nav-item nav-link active" href="activity.html">Activity View</a>
           <a class="nav-item nav-link" href="register.html">Register</a>
           <a class="nav-item nav-link" href="login.html">Login</a>
         </div>
       </div>
     </nav>
     <div class="container-fluid justify-content-center text-center" id="activityData">
-      <h6>Fitness Path</h6>
-      <style>
-        h6{
-        font-weight: bold;
-        margin: 10px;
-        } 
-      </style>
+      <h2>Activity Summary</h2>
+      <div class="row" id="sendUVThreshold">
+        <div class="col-sm">
+          <p id="totalDuration"><b>Total Duration: </b></p>
+        </div>
+        <div class="col-sm">
+          <p id="totalCalories"><b>Total Calories Burned: </b></p>
+        </div>
+        <div class="col-sm">
+          <p id="totalActivityUV"><b>Total UV Exposure: </b></p>
+        </div>
+      </div>
+      <br>
+      <h2>Activity Paths</h2>
       <div id="map">
         <script>
           function initMap() {
@@ -73,48 +81,61 @@
               
               var xhr = new XMLHttpRequest();
               xhr.addEventListener("load", function(){
-          	    for (var i = 0; i < this.response.submittedData.length; i++){
-                      var tr = "<tr>";
-                      var formattedDate = $.format.date(this.response.submittedData[i]["activityStart"],"MM/dd/yyyy");
-                      var td1 = "<td>"+formattedDate+"</td>"
-                      var td2 = "<td>"+this.response.submittedData[i]["duration"].toFixed(2)+"</td>";
-                      var td3 = "<td>"+this.response.submittedData[i]["caloriesBurned"].toFixed(2)+"</td>";
-                      var td4 = "<td>"+this.response.submittedData[i]["totalUV"].toFixed(2)+"</td>";
-                      var td45 = "<td><ul id=\"dropdown2\" class=\"dropdown-content\"><li id=\"walking\">Walking</li><li id=\"running\">Running</li><li id=\"biking\">Biking</li></ul></td>";
-                      var td5 = "<td><button class=\"changeActivity\">Change Activity</button></td>";
+                var totalActivityUV = 0.0;
+                var totalDuration = 0.0;
+                var totalCalories = 0.0;
+
+                for (var i = 0; i < this.response.submittedData.length; i++){
+                  totalActivityUV = totalActivityUV + this.response.submittedData[i]["totalUV"];
+                  totalDuration = totalDuration + this.response.submittedData[i]["duration"];
+                  totalCalories = totalCalories + this.response.submittedData[i]["caloriesBurned"];
+
+                  var tr = "<tr>";
+                  var td0 = "<td>"+this.response.submittedData[i]["activityType"]+"</td>";
+                  var formattedDate = $.format.date(this.response.submittedData[i]["activityStart"],"MM/dd/yyyy");
+                  var td1 = "<td>"+formattedDate+"</td>"
+                  var td2 = "<td>"+this.response.submittedData[i]["duration"].toFixed(2)+"</td>";
+                  var td3 = "<td>"+this.response.submittedData[i]["caloriesBurned"].toFixed(2)+"</td>";
+                  var td4 = "<td>"+this.response.submittedData[i]["totalUV"].toFixed(2)+"</td>";
+                  var td5 = "<td><div class=\"dropdown\"><button class=\"btn btn-secondary dropdown-toggle\" type=\"button\" id=\"dropdownMenuButton\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">Activity Type</button><div class=\"dropdown-menu\" aria-labelledby=\"dropdownMenuButton\"><a class=\"dropdown-item\" href=\"#\" onclick=\"changeType('Walking'," + this.response.submittedData[i]["activityId"] +")\">Walking</a><a class=\"dropdown-item\" href=\"#\" onclick=\"changeType('Running'," + this.response.submittedData[i]["activityId"] +")\">Running</a><a class=\"dropdown-item\" href=\"#\" onclick=\"changeType('Biking'," + this.response.submittedData[i]["activityId"] +")\">Biking</a></div></div></td>"
+                  
+                  var xhr = new XMLHttpRequest();
+                  xhr.addEventListener("load", function(){
+                    for (var i = 0; i < this.response.submittedData.length; i++){
+                       var newPoint = {lat: this.response.submittedData[i]["gpsLocationX"], lng: this.response.submittedData[i]["gpsLocationY"]};
+                       activityCoordinates.push(newPoint);
+                    }
+                    
+                    // creates a path based on those coordinates
+                    var activityPath = new google.maps.Polyline({
+                      path: activityCoordinates,
+                      geodesic: true,
+                      strokeColor: '#FF0000',
+                      strokeOpacity: 1.0,
+                      strokeWeight: 10
+                    });
+                
+                    // the path now belongs to the map we created above
+                    activityPath.setMap(map); 
                       
-                      var xhr = new XMLHttpRequest();
-                      xhr.addEventListener("load", function(){
-                  	    for (var i = 0; i < this.response.submittedData.length; i++){
-                  	       var newPoint = {lat: this.response.submittedData[i]["gpsLocationX"], lng: this.response.submittedData[i]["gpsLocationY"]};
-                  	       activityCoordinates.push(newPoint);
-                  	    }
-                  	    
-                  	    // creates a path based on those coordinates
-                          var activityPath = new google.maps.Polyline({
-                            path: activityCoordinates,
-                            geodesic: true,
-                            strokeColor: '#FF0000',
-                            strokeOpacity: 1.0,
-                            strokeWeight: 10
-                          });
-                      
-                          // the path now belongs to the map we created above
-                          activityPath.setMap(map); 
-                  	    
-                  	});
-                  	xhr.responseType = "json";
-                  	xhr.open("GET", '/uvfitdata/' + localStorage.getItem("deviceId") + '/' + this.response.submittedData[i]["activityId"]);
-                  	xhr.setRequestHeader("Content-type", "application/json");
-                  	xhr.send(JSON.stringify({}));
-                  	
-                  	$("#activityTable").append(tr+td1+td2+td3+td4+td45+td5+"</tr>");
-                  }
-          	});
-          	xhr.responseType = "json";
-          	xhr.open("GET", '/activity/recent/' + localStorage.getItem("deviceId"));
-          	xhr.setRequestHeader("Content-type", "application/json");
-          	xhr.send(JSON.stringify({}));
+                  });
+
+                  xhr.responseType = "json";
+                  xhr.open("GET", '/uvfitdata/' + localStorage.getItem("deviceId") + '/' + this.response.submittedData[i]["activityId"]);
+                  xhr.setRequestHeader("Content-type", "application/json");
+                  xhr.send(JSON.stringify({}));
+                  
+                  $("#activityTable").append(tr+td0+td1+td2+td3+td4+td5+"</tr>");
+                }
+
+                $("#totalDuration").append(totalDuration.toFixed(2));
+                $("#totalCalories").append(totalCalories.toFixed(2));
+                $("#totalActivityUV").append(totalActivityUV.toFixed(2));
+            });
+            xhr.responseType = "json";
+            xhr.open("GET", '/activity/recent/' + localStorage.getItem("deviceId"));
+            xhr.setRequestHeader("Content-type", "application/json");
+            xhr.send(JSON.stringify({}));
               
           }
         </script>
@@ -126,14 +147,15 @@
         <script async defer
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2iT9MTRQncUg57g3rfPF9YHu4BIscqx0&callback=initMap"></script>
       </div>
+      <br>
+      <h2>Previous Week's Activities</h2>
       <table class="table table-striped" id="activityTable">
         <th>Activity Type</th>
         <th>Activity Date</th>
         <th>Duration (Minutes)</th>
         <th>Calories Burned</th>
         <th>Total UV</th>
-        <th>  dropdown </th>
-        <th>  changes  </th>
+        <th>Change Type</th>
       </table>
     </div>
   </body>

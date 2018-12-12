@@ -9,14 +9,18 @@ $(function () {
 		location.replace("dashboard.html");
 		return;
 	}
-
-	getRecentActivities();
-
-	$("#signoutButton").click(signoutHandler);
-	$("#registerUVFitButton").click(registerUVFit);
-	$("#updateUVFitButton").click(updateUVFit);
 });
 
-function getRecentActivities() {
-	return
+function changeType(newType, activityId) {
+	var xhr = new XMLHttpRequest();
+	xhr.addEventListener("load", changeResponse);
+	xhr.responseType = "json";
+	xhr.open("PUT", '/activity/update/' + localStorage.getItem("deviceId") + "/" + activityId);
+	xhr.setRequestHeader("Content-type", "application/json");
+	xhr.send(JSON.stringify({ activityType: newType }));
+	return;
+}
+
+function changeResponse() {
+	location.reload();
 }

@@ -6,7 +6,8 @@ var activitySchema = new db.Schema({
 	activityStart: { type: Date, required: true },
 	activityType: { type: String },
 	caloriesBurned: { type: Number },
-	duration: { type: Number }
+	duration: { type: Number },
+	totalUV: { type: Number }
 });
 
 var Activity = db.model("Activity", activitySchema);

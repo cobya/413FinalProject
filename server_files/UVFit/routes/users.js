@@ -212,7 +212,7 @@ router.put("/updateemail/:email", function (req, res, next) {
 					return res.status(500).json({ success: false, error: err.errmsg });
 				}
 				else {
-					return res.status(204).json({ success: true, message: "Account for " + user.email + " has been updated." });
+					return res.status(202).json({ success: true, message: "Account for " + user.email + " has been updated." });
 				}
 			});
 		}
@@ -242,7 +242,7 @@ router.put("/updatename/:email", function (req, res, next) {
 					return res.status(500).json({ success: false, error: err.errmsg });
 				}
 				else {
-					return res.status(204).json({ success: true, message: "Account for " + user.email + " has been updated." });
+					return res.status(202).json({ success: true, message: "Account for " + user.email + " has been updated.", email: user.email });
 				}
 			});
 		}
@@ -284,7 +284,7 @@ router.put("/updatepass/:email", function (req, res, next) {
 						return res.status(500).json({ success: false, error: err.errmsg });
 					}
 					else {
-						return res.status(204).json({ success: true, message: "Account for " + user.email + " has been updated." });
+						return res.status(202).json({ success: true, message: "Account for " + user.email + " has been updated." });
 					}
 				});
 			});
@@ -313,7 +313,7 @@ router.put("/updatethres/:email", function (req, res, next) {
 					return res.status(500).json({ success: false, error: err.errmsg });
 				}
 				else {
-					return res.status(204).json({ success: true, message: "Account for " + user.email + " has been updated." });
+					return res.status(202).json({ success: true, message: "Account for " + user.email + " has been updated." });
 				}
 			});
 		}

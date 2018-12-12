@@ -50,7 +50,7 @@
 				<input type="submit" class="btn btn-primary btn-lg" id="signoutButton" value="Sign Out">
 			</div>
 		</div>
-		<h1 class="display-4">Your Account Info</h1>
+		<h1 class="display-4">Your Account</h1>
 		<hr class="my-4">
 		<div class="row">
 			<div class="col-sm">
@@ -64,7 +64,7 @@
 			</div>
 		</div>
 		<br>
-		<h1 class="display-4">Your UVFit Info</h1>
+		<h1 class="display-4">Your UVFit</h1>
 		<hr class="my-4">
 		<div class="row">
 			<div class="col-sm">
@@ -81,7 +81,7 @@
 				<input type="text" name="uvFitDeviceIdReg" id="uvFitDeviceIdReg" placeholder="">
 			</div>
 			<div class="col-sm">
-				<input type="submit" id="registerUVFitButton" value="Register UVFit">
+				<input type="submit" class="btn btn-primary btn mb-3" id="registerUVFitButton" value="Register UVFit">
 			</div>
 		</div>
 		<div class="row" id="updateUVFit">
@@ -91,16 +91,39 @@
 				<input type="text" name="uvFitDeviceIdUpdate" id="uvFitDeviceIdUpdate" placeholder="">
 			</div>
 			<div class="col-sm">
-				<input type="submit" class="btn btn-primary btn" id="updateUVFitButton" value="Update UVFit">
+				<input type="submit" class="btn btn-primary btn mb-3" id="updateUVFitButton" value="Update UVFit">
 			</div>
-		</div>
-		<div class="row">
-			<!-- Combined info box for UV Fit register / update -->
-			<div id="regUpdateInfo" class="alert alert-dark" role="alert"></div>
 		</div>
 		<br>
 		<h1 class="display-4">Update Your Data</h1>
 		<hr class="my-4">
+		<!-- <div class="row" id="updateEmail">
+			<div class="col-sm">
+				<label for="newEmail">New Account Email</label>
+				<input type="text" name="newEmail" id="newEmail" placeholder="">
+			</div>
+			<div class="col-sm">
+				<input type="submit" class="btn btn-primary btn mb-3" id="emailButton" value="Update Email">
+			</div>
+		</div> -->
+		<div class="row" id="updateName">
+			<div class="col-sm">
+				<label for="newName">New Account Name</label>
+				<input type="text" name="newName" id="newName" placeholder="">
+			</div>
+			<div class="col-sm">
+				<input type="submit" class="btn btn-primary btn mb-3" id="nameButton" value="Update Name">
+			</div>
+		</div>
+		<div class="row" id="updatePassword">
+			<div class="col-sm">
+				<label for="newPass">New Account Password</label>
+				<input type="password" name="newPass" id="newPass" placeholder="">
+			</div>
+			<div class="col-sm">
+				<input type="submit" class="btn btn-primary btn mb-3" id="passButton" value="Update Password">
+			</div>
+		</div>
 		<div class="row" id="sendUVThreshold">
 			<div class="col-sm">
 				<label for="thresholdUpdate">New Threshold</label>
@@ -111,8 +134,12 @@
 				<input type="text" name="accessToken" id="accessToken" placeholder="">
 			</div>
 			<div class="col-sm">
-				<input type="submit" class="btn btn-primary btn" id="thresholdButton" value="Update UV Threshold">
+				<input type="submit" class="btn btn-primary btn mb-3" id="thresholdButton" value="Update Threshold">
 			</div>
+		</div>
+		<div class="row">
+			<!-- Combined info box for UV Fit register / update -->
+			<div id="regUpdateInfo" class="alert alert-dark" role="alert"></div>
 		</div>
 	</div>
 	

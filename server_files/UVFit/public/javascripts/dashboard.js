@@ -23,6 +23,9 @@ $(function () {
 	$("#registerUVFitButton").click(registerUVFit);
 	$("#updateUVFitButton").click(updateUVFit);
 	$("#thresholdButton").click(updateThreshold);
+	// $("#emailButton").click(updateEmail);
+	$("#nameButton").click(updateName);
+	$("#passButton").click(updatePass);
 });
 
 // on load, get the recent UV fit data
@@ -140,8 +143,32 @@ function updateResponse() {
 }
 
 function reloadResponse() {
-	location.reload();
+	if (this.status == 202) {
+		location.reload();
+	} else {
+		$("#regUpdateInfo").show();
+		$("#regUpdateInfo").html("<p>" + "Error: " + this.response.error + "</p>");
+	}
 }
+
+function passResponse() {
+	if (this.status == 202) {
+		signoutHandler();
+	} else {
+		$("#regUpdateInfo").show();
+		$("#regUpdateInfo").html("<p>" + "Error: " + this.response.error + "</p>");
+	}
+}
+
+// function emailResponse() {
+// 	if (this.status == 202) {
+// 		localStorage.setItem("userEmail", this.response.email);
+// 		location.reload();
+// 	} else {
+// 		$("#regUpdateInfo").show();
+// 		$("#regUpdateInfo").html("<p>" + "Error: " + this.response.error + "</p>");
+// 	}
+// }
 
 // allow update of UV threshold on a user acct
 function updateThreshold() {
@@ -159,7 +186,85 @@ function updateThreshold() {
 	var xhr = new XMLHttpRequest();
 	xhr.addEventListener("load", reloadResponse);
 	xhr.responseType = "json";
-	xhr.open("POST", "https://api.particle.io/v1/devices/" + localStorage.getItem("deviceId") + "/getThreshold");
+	xhr.open("POST", "https://api.particle.io/v1/devices/" + localStorage.getItem("deviceId") + "/threshold");
 	xhr.setRequestHeader("Content-type", "application/json");
 	xhr.send(JSON.stringify({ access_token: accessToken, threshold: enteredThreshold }));
 }
+
+function updateThreshold() {
+	var accessToken = $("#accessToken").val();
+	var enteredThreshold = $("#thresholdUpdate").val();
+	if (!enteredThreshold || !accessToken) return;
+
+	var xhr = new XMLHttpRequest();
+	xhr.addEventListener("load", updateResponse);
+	xhr.responseType = "json";
+	xhr.open("PUT", '/users/updatethres/' + localStorage.getItem("userEmail"));
+	xhr.setRequestHeader("Content-type", "application/json");
+	xhr.send(JSON.stringify({ threshold: enteredThreshold }));
+
+	var xhr = new XMLHttpRequest();
+	xhr.addEventListener("load", reloadResponse);
+	xhr.responseType = "json";
+	xhr.open("POST", "https://api.particle.io/v1/devices/" + localStorage.getItem("deviceId") + "/threshold");
+	xhr.setRequestHeader("Content-type", "application/json");
+	xhr.send(JSON.stringify({ access_token: accessToken, threshold: enteredThreshold }));
+}
+
+function updateName() {
+	var newName = $("#newName").val();
+	if (!newName) return;
+
+	var xhr = new XMLHttpRequest();
+	xhr.addEventListener("load", reloadResponse);
+	xhr.responseType = "json";
+	xhr.open("PUT", '/users/updatename/' + localStorage.getItem("userEmail"));
+	xhr.setRequestHeader("Content-type", "application/json");
+	xhr.send(JSON.stringify({ fullName: newName }));
+}
+
+function updatePass() {
+	var newPass = $("#newPass").val();
+	if (!newPass) return;
+
+	$("#regUpdateInfo").hide();
+	var passwordValid = true;
+	var reLowerCase = /[a-z]/;
+	var reUpperCase = /[A-Z]/;
+	var reNumber = /[0-9]/;
+	if (newPass.length < 8 || !reLowerCase.test(newPass) || !reUpperCase.test(newPass) || !reNumber.test(newPass)) {
+		passwordValid = false;
+	}
+	if (!passwordValid) {
+		$("#regUpdateInfo").show();
+		$("#regUpdateInfo").html("<p>" + "Please enter a password that meets our password criteria. The password must include an uppercase letter, lowercase letter, and number." + "</p");
+	}
+
+	var xhr = new XMLHttpRequest();
+	xhr.addEventListener("load", passResponse);
+	xhr.responseType = "json";
+	xhr.open("PUT", '/users/updatepass/' + localStorage.getItem("userEmail"));
+	xhr.setRequestHeader("Content-type", "application/json");
+	xhr.send(JSON.stringify({ password: newPass }));
+}
+
+// function updateEmail() {
+// 	var newEmail = $("#newEmail").val();
+// 	if (!newEmail) return;
+
+// 	$("#regUpdateInfo").hide();
+// 	var emailValid = true;
+// 	var reEmail = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+// 	if (!reEmail.test(newEmail)) {
+// 		$("#regUpdateInfo").show();
+// 		$("#regUpdateInfo").html("<p>" + "Please enter a correctly formatted email address." + "</p");
+// 		return;
+// 	}
+
+// 	var xhr = new XMLHttpRequest();
+// 	xhr.addEventListener("load", emailResponse);
+// 	xhr.responseType = "json";
+// 	xhr.open("PUT", '/users/updateemail/' + localStorage.getItem("userEmail"));
+// 	xhr.setRequestHeader("Content-type", "application/json");
+// 	xhr.send(JSON.stringify({ email: newEmail }));
+// }

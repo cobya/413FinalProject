@@ -44,7 +44,7 @@ function registerNewAccount() {
 	}
 	if (!passwordValid) {
 		$("#registerInfo").show();
-		$("#registerInfo").html("<p>" + "Please enter a password that meets our password criteria." + "</p");
+		$("#registerInfo").html("<p>" + "Please enter a password that meets our password criteria. The password must include an uppercase letter, lowercase letter, and number." + "</p");
 	}
 
 	if (!passwordValid || !nameValid || !emailValid) {

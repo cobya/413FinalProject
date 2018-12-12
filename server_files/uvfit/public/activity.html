@@ -82,7 +82,8 @@
                       var xhr = new XMLHttpRequest();
                       xhr.addEventListener("load", function(){
                   	    for (var i = 0; i < this.response.submittedData.length; i++){
-                  	       activityCoordinates.push({lat: this.response.submittedData[i]["gpsLocationX"], lng: this.response.submittedData[i]["gpsLocationY"]});
+                  	       var newPoint = {lat: this.response.submittedData[i]["gpsLocationX"], lng: this.response.submittedData[i]["gpsLocationY"]};
+                  	       activityCoordinates.push(newPoint);
                   	    }
                   	    
                   	    // creates a path based on those coordinates

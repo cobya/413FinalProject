@@ -4,6 +4,13 @@
 //-------------------------------------------------------------------
 
 #include <AssetTracker.h>
+#include <vector>
+//#include <Adafruit_VEML6070.h>
+#include "FitnessDetector.h"
+#include "sysReporter.h"
+#include <stdlib.h>
+#include <time.h>
+#include <cstdlib>
 
 //-------------------------------------------------------------------
 
@@ -16,11 +23,18 @@ private:
 private:
     State state;
     int tick;
-    int led;
-    AssetTracker& gpsSensor;
+    int led2;
+    int button;
+    int check;
+    int activityId;
+    string deviceId;
+    string apiKey;
+    FitnessDetector& fitnessDetector;
 
 public:
-    sysReporter(AssetTracker &theTracker);    
+    sysReporter(FitnessDetector &theDetector);
+    string getDeviceId();
+    string getApiKey();
     void execute();
 };
 

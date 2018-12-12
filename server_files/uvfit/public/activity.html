@@ -79,7 +79,8 @@
                       var td1 = "<td>"+formattedDate+"</td>"
                       var td2 = "<td>"+this.response.submittedData[i]["duration"].toFixed(2)+"</td>";
                       var td3 = "<td>"+this.response.submittedData[i]["caloriesBurned"].toFixed(2)+"</td>";
-                      var td4 = "<td>"+this.response.submittedData[i]["totalUV"].toFixed(2)+"</td></tr>";
+                      var td4 = "<td>"+this.response.submittedData[i]["totalUV"].toFixed(2)+"</td>";
+                      var td5 = "<td><button class=\"changeActivity\">Change Activity</button></td>";
                       
                       var xhr = new XMLHttpRequest();
                       xhr.addEventListener("load", function(){
@@ -106,7 +107,7 @@
                   	xhr.setRequestHeader("Content-type", "application/json");
                   	xhr.send(JSON.stringify({}));
                   	
-                  	$("#activityTable").append(tr+td1+td2+td3+td4);
+                  	$("#activityTable").append(tr+td1+td2+td3+td4+td5+"</tr>");
                   }
           	});
           	xhr.responseType = "json";
@@ -125,6 +126,7 @@
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2iT9MTRQncUg57g3rfPF9YHu4BIscqx0&callback=initMap"></script>
       </div>
       <table class="table table-striped" id="activityTable">
+        <th>Activity Type</th>
         <th>Activity Date</th>
         <th>Duration (Minutes)</th>
         <th>Calories Burned</th>

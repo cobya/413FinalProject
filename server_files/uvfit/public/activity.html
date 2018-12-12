@@ -77,6 +77,7 @@
                       var td1 = "<td>"+formattedDate+"</td>"
                       var td2 = "<td>"+this.response.submittedData[i]["duration"].toFixed(2)+"</td>";
                       var td3 = "<td>"+this.response.submittedData[i]["caloriesBurned"].toFixed(2)+"</td>";
+                      var td4 = "<td>"+this.response.submittedData[i]["totalUV"].toFixed(2)+"</td></tr>";
                       
                       var xhr = new XMLHttpRequest();
                       xhr.addEventListener("load", function(){
@@ -102,7 +103,7 @@
                   	xhr.setRequestHeader("Content-type", "application/json");
                   	xhr.send(JSON.stringify({}));
                   	
-                  	$("#activityTable").append(tr+td1+td2+td3);
+                  	$("#activityTable").append(tr+td1+td2+td3+td4);
                   	$("#activityTable").append("<hr class=\"my-4\">");
                   }
           	});
@@ -125,6 +126,7 @@
         <th>Activity Date</th>
         <th>Duration (Minutes)</th>
         <th>Calories Burned</th>
+        <th>Total UV</th>
       </table>
     </div>
   </body>
